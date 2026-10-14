@@ -2,6 +2,11 @@
 
 Typography-led creative-studio portfolio (dark + light theme, uz/ru/en) with a liquid-chrome WebGL blob that morphs between page sections (reference style: liqium.ru — structure and feel only, never its copy, brand or clients).
 
+## Company context — read first
+3dot is a **digitalization / systematization company** (CRM, ERP, process automation, e-document flow, web apps, integrations) for businesses and government organizations in Uzbekistan — not a design studio.
+At the start of every session read `hq/README.md`, then `hq/02-holat.md` (status) and `hq/08-ochiq-savollar.md` (open questions). After any work, update `hq/02-holat.md` and log decisions in `hq/06-qarorlar-jurnali.md`.
+Tone for all public copy: serious, corporate, minimal emoji, no invented numbers or clients (see `hq/01-brend.md`). Never store passwords in this repo.
+
 ## Commands
 - `npm run dev` — dev server (http://localhost:3000)
 - `npm run typecheck` · `npm run build` · `npm run generate` (static prerender → `.output/public`)

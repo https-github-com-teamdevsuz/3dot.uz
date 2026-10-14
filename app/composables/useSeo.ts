@@ -83,7 +83,7 @@ export const useSeo = () => {
           ...org,
           hasOfferCatalog: {
             '@type': 'OfferCatalog',
-            name: t.value.servicesTitle,
+            name: s.home.catalogName,
             itemListElement: t.value.services.map((x) => ({
               '@type': 'Offer',
               itemOffered: { '@type': 'Service', name: x.title, description: x.sub, provider: { '@id': org['@id'] }, areaServed: 'UZ' }

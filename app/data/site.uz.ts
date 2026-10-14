@@ -3,48 +3,29 @@ import type { ProjectCopy, ProjectSlug } from './site'
 /** Uzbek (Latin) — source of truth for the `SiteCopy` shape. No `as const` on purpose. */
 export default {
   site: {
-    tagline: ['digital.', 'systems.', 'growth'],
+    tagline: ['Excel o‘rniga —', 'yagona tizim.'],
     role: 'raqamli yechimlar',
     city: 'Toshkent',
-    heroLead: 'Qog‘oz, Excel va tarqoq dasturlar o‘rniga — yagona tizim. CRM, ERP va jarayonlarni avtomatlashtirish.',
+    heroLead: 'Savdo, ombor va hujjatlar uchun CRM va ERP. Jarayonlaringizni bepul tahlil qilib, nimani avtomatlashtirish foyda berishini ko‘rsatamiz.',
     intro:
       'Biznes va davlat tashkilotlari jarayonlarini raqamlashtiramiz: qog‘oz va Excel jadvallardan — tartibli, avtomatlashgan tizimlarga. Har bir yechimni ish jarayonlaringizga moslab quramiz.',
     nav: [
-      { label: 'Kompaniya', hash: '#intro' },
-      { label: 'Loyihalar', hash: '#projects' },
       { label: 'Xizmatlar', hash: '#services' },
+      { label: 'Loyihalar', hash: '#projects' },
+      { label: 'Narxlar', hash: '#pricing' },
       { label: 'Aloqa', hash: '#contact' }
     ]
   },
-  servicesTitle: 'Raqamli yechimlar',
+  servicesTitle: 'Qaysi jarayonni tartibga solamiz?',
   services: [
-    { title: 'CRM tizimlari', sub: 'Mijozlar / Savdo / Voronka' },
-    { title: 'ERP va ombor', sub: 'Ishlab chiqarish / Ombor / Moliya' },
-    { title: 'Avtomatlashtirish', sub: 'Biznes-jarayonlar / Botlar' },
-    { title: 'Hujjat aylanishi', sub: 'Elektron hujjatlar / Ijro nazorati' },
-    { title: 'Veb-ilovalar', sub: 'Kabinetlar / Portallar / SaaS' },
-    { title: 'Veb-saytlar', sub: 'Korporativ / Landing / 3D' },
-    { title: 'E-commerce', sub: 'Onlayn do‘kon / To‘lov tizimlari' },
-    { title: 'Integratsiyalar', sub: '1C / API / Payme / Click' },
-    { title: 'Mobil ilovalar', sub: 'iOS / Android' },
-    { title: 'Tahlil va BI', sub: 'Dashbordlar / Hisobotlar' },
-    { title: 'SEO va SMM', sub: 'Trafik / Kontent / Reklama' },
-    { title: 'Qo‘llab-quvvatlash', sub: 'Monitoring / SLA / Rivojlantirish' }
+    { title: 'CRM', sub: 'Mijozlar va savdo Excel o‘rniga bitta oynada.', bullets: ['Lidlar va bitimlar voronkasi', 'Eslatmalar va vazifalar', 'Savdo hisobotlari'] },
+    { title: 'ERP va ombor', sub: 'Qoldiq, xarid va buyurtmalar real vaqtda.', bullets: ['Ombor qoldig‘i real vaqtda', 'Xarid va buyurtmalar nazorati', 'Inventarizatsiya'] },
+    { title: 'Hujjat aylanishi', sub: 'Qog‘oz o‘rniga elektron kelishuv va nazorat.', bullets: ['Elektron kelishuv', 'Muddat va ijro nazorati', 'Hujjatlar arxivi'] },
+    { title: 'Integratsiyalar', sub: 'Qo‘lda kiritish o‘rniga 1C, Payme, Click va Telegram bilan avtomatik almashinuv.', bullets: ['1C bilan ma‘lumot almashinuvi', 'Payme va Click to‘lovlari', 'Telegram xabarnomalari'] }
   ],
   stats: {
-    headline: 'Murakkab tizimlarni joriy etish tajribasi',
-    caption: 'avtomatlashtirilgan biznes-jarayonlar',
-    awards: ['Davlat sektori', 'Savdo', 'Ishlab chiqarish', 'Logistika'],
     numbers: ['Joriy etilgan tizimlar', 'Yil bozorda']
   },
-  serviceTabs: [
-    { title: 'Raqamlashtirish', text: 'Jarayonlaringizni o‘rganib, ularni tizimga aylantiramiz', items: ['Audit', 'CRM / ERP', 'Hujjat aylanishi', 'Botlar'] },
-    { title: 'Ishlab chiqish', text: 'Veb, mobil va backend — bitta jamoada', items: ['Nuxt / Vue', 'Node.js / Laravel', 'Flutter', 'PostgreSQL'] },
-    { title: 'Integratsiya', text: 'Mavjud dasturlaringizni bir-biriga ulaymiz', items: ['1C', 'Payme / Click', 'Telegram', 'API'] },
-    { title: 'Marketing', text: 'Tizim tayyor — endi mijoz oqimi kerak', items: ['SEO', 'SMM', 'Google Ads', 'Yandex Direct'] },
-    { title: 'Qo‘llab-quvvatlash', text: 'Ishga tushirgandan keyin ham yoningizdamiz', items: ['Monitoring', 'SLA', 'O‘qitish', 'Rivojlantirish'] }
-  ],
-  stack: ['Nuxt / Vue', 'Node.js', 'Laravel', 'PostgreSQL', '1C integratsiya', 'Telegram API', 'Docker / DevOps', 'three.js'],
   process: [
     { title: 'Audit', text: 'Jarayonlaringizni o‘rganamiz: qayerda vaqt va pul yo‘qolayotganini aniqlaymiz' },
     { title: 'Loyihalash', text: 'Texnik topshiriq, tizim arxitekturasi va interfeys prototipi' },
@@ -53,10 +34,10 @@ export default {
     { title: 'O‘qitish', text: 'Xodimlaringizni o‘qitamiz, yo‘riqnomalar tayyorlaymiz' },
     { title: 'Qo‘llab-quvvatlash', text: 'Monitoring, xatolarni tuzatish va tizimni rivojlantirish' }
   ],
-  pricing: [
-    { label: 'Jarayonlar auditi va konsultatsiya', value: 'bepul' },
-    { label: 'Loyiha narxi', value: 'individual hisob-kitob' }
-  ],
+  pricing: {
+    audit: { label: 'Jarayonlar auditi', value: 'bepul, 1–2 kun' },
+    project: { label: 'Loyiha narxi', from: (p: string) => `${p} dan boshlab`, note: 'Aniq narx — bepul auditdan keyin.' }
+  },
   faq: [
     {
       q: 'Bizda hamma narsa Excelda. Qayerdan boshlash kerak?',
@@ -68,7 +49,7 @@ export default {
     },
     {
       q: 'Mavjud 1C yoki boshqa dasturlarimiz bilan ishlaydimi?',
-      a: 'Ha. 1C, to‘lov tizimlari (Payme, Click), Telegram va boshqa servislar bilan integratsiya qilamiz — ma’lumot qo‘lda ikki marta kiritilmaydi.'
+      a: 'Ha. 1C, to‘lov tizimlari (Payme, Click), Telegram va boshqa servislar bilan integratsiya qilamiz — ma‘lumot qo‘lda ikki marta kiritilmaydi.'
     },
     {
       q: 'Ishga tushirilgandan keyin tizimni kim qo‘llab-quvvatlaydi?',
@@ -103,7 +84,7 @@ export default {
       tags: ['Logistika', 'Veb-ilova'],
       awards: ['Mijoz qo‘ng‘iroqlari −60%'],
       description:
-        'Haydovchilar uchun mobil ilova, dispetcher paneli va mijozlar o‘z yukini onlayn kuzatadigan kabinet. GPS ma’lumotlari va hujjatlar bir joyda.'
+        'Haydovchilar uchun mobil ilova, dispetcher paneli va mijozlar o‘z yukini onlayn kuzatadigan kabinet. GPS ma‘lumotlari va hujjatlar bir joyda.'
     },
     'shifo-navbat': {
       summary: 'Klinikalar tarmog‘i uchun onlayn navbat va elektron karta',
@@ -122,59 +103,64 @@ export default {
   } satisfies Record<ProjectSlug, ProjectCopy>,
   ui: {
     skipLink: 'Asosiy kontentga o‘tish',
+    cta: { label: 'Bepul audit olish', telegram: 'Telegramda yozish' },
+    sectionCta: {
+      projects: 'Sizga ham shunday tizim kerakmi?',
+      process: 'Birinchi qadam — bepul audit.',
+      faq: 'Savol qoldimi? Auditda javob beramiz.',
+      project: 'Sizga ham shunday tizim kerakmi?'
+    },
     header: {
       logoAria: '3dot — bosh sahifa',
       navAria: 'Asosiy menyu',
-      cta: 'Loyihani muhokama qilish',
       menuOpen: 'Menyuni ochish',
       menuClose: 'Menyuni yopish'
     },
     modal: {
       close: 'Yopish',
-      title: 'Assalomu alaykum! Keling, yangi loyihangizni muhokama qilamiz',
+      title: 'Bepul auditga yoziling',
+      note: '1 ish kuni ichida bog‘lanamiz. Majburiyat yo‘q.',
       name: 'Ismingiz',
       contact: 'Telefon, e-mail yoki @telegram',
-      budget: 'Byudjet',
-      message: 'Xabar',
-      consent: 'Shaxsiy ma’lumotlarimni qayta ishlashga roziman',
-      send: 'Yuborish',
+      budget: 'Taxminiy byudjet (ixtiyoriy)',
+      message: 'Xabar (ixtiyoriy)',
+      consent: 'Shaxsiy ma‘lumotlarimni qayta ishlashga roziman',
+      send: 'Auditga yozilish',
       sending: 'Yuborilmoqda…',
       doneTitle: 'Rahmat!',
       doneText: 'So‘rovingizni o‘rganib, tez orada bog‘lanamiz.',
-      telegram: 'Telegramda yozish'
+      error: 'Yuborib bo‘lmadi. Telegramda yozing yoki qayta urinib ko‘ring.',
+      throttled: 'So‘rov yuborildi. Qayta yuborish uchun 30 soniya kuting.',
+      telegram: 'Telegramda yozish',
+      errName: 'Ismingizni kiriting',
+      errContact: 'Telefon, e-mail yoki @telegram kiriting',
+      errConsent: 'Davom etish uchun rozilik bering',
+      retry: 'Qayta urinib ko‘rish'
     },
     footer: { navAria: 'Pastki menyu' },
-    hero: { scroll: 'pastga', index: '(IT-yechimlar ’26)', cta: 'Loyihani muhokama qilish' },
     intro: { eyebrow: 'studiya haqida' },
-    services: { eyebrow: 'xizmatlar' },
-    stats: { eyebrow: 'tajriba' },
+    services: { eyebrow: 'xizmatlar', also: 'Shuningdek: veb, mobil ilovalar, BI' },
     projects: {
       eyebrow: 'tanlangan ishlar',
       title: 'Loyihalar',
       count: (n: number) => `${n} ta loyiha`,
       cursor: 'Ko‘rish'
     },
-    expertise: {
-      eyebrow: 'ekspertiza',
-      title: 'Har bir vazifaga individual yondashuv',
-      tabsAria: 'Xizmat yo‘nalishlari',
-      stackLabel: 'ishlab chiqish vositalari',
-      clientsAria: 'Mijozlar'
-    },
     process: {
       eyebrow: 'jarayon',
       title: 'Ish bosqichlari',
       text: 'Har bir bosqich aniq natija bilan yakunlanadi — siz har doim loyiha qaysi bosqichda ekanini bilasiz.'
     },
-    faq: { pricingEyebrow: 'narxlar', pricingTitle: 'Loyiha qancha turadi?', eyebrow: 'ko‘p beriladigan savollar' },
-    contact: { eyebrow: 'keling, tanishamiz', title: 'Loyihani muhokama qilamizmi?', button: 'Yozish', cursor: 'Yozish' },
+    faq: { integrations: 'Integratsiyalar', pricingEyebrow: 'narxlar', pricingTitle: 'Loyiha qancha turadi?', eyebrow: 'ko‘p beriladigan savollar' },
+    contact: { eyebrow: 'keling, tanishamiz', title: 'Jarayonlaringiz qayerda vaqt yo‘qotayotganini bepul ko‘rsatamiz', button: 'Bepul audit', cursor: 'Audit' },
     project: {
       back: '← barcha loyihalar',
       year: 'Yil',
       stack: 'Stek',
       results: 'Natijalar',
       next: 'keyingi loyiha',
-      nextCursor: 'Keyingi'
+      nextCursor: 'Keyingi',
+      nda: 'Mijoz nomi NDA ostida'
     },
     error: {
       code: 'xato',

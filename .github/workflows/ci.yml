@@ -27,11 +27,23 @@ jobs:
       - name: Validate agent model pins
         run: npm run agents:check
 
+      - name: Lead relay self-check
+        run: node workers/lead-relay/test.mjs
+
       - name: Typecheck
         run: npm run typecheck
 
       - name: Generate static site
         run: npm run generate
+
+      # ADR-6: the bot token and the Telegram API host must never reach the static output.
+      - name: Check static output for Telegram secrets
+        run: |
+          test -d .output/public || { echo "::error::.output/public missing"; exit 1; }
+          if grep -rEl 'bot[0-9]{6,}:|[0-9]{8,10}:[A-Za-z0-9_-]{30,}|api\.telegram\.org' .output/public; then
+            echo "::error::Telegram token or API host found in .output/public"
+            exit 1
+          fi
 
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium

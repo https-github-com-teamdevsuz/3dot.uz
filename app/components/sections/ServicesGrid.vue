@@ -15,12 +15,15 @@ useReveal(root)
       </header>
 
       <ul class="services__grid">
-        <li v-for="(s, i) in t.services" :key="s.title" class="services__item" :data-reveal="(i % 4) * 0.06">
-          <span class="mono dim">{{ String(i + 1).padStart(2, '0') }}</span>
+        <li v-for="(s, i) in t.services" :key="s.title" class="services__item" :data-reveal="i * 0.06">
           <h3 class="services__title">{{ s.title }}</h3>
-          <p class="dim">{{ s.sub }}</p>
+          <p>{{ s.sub }}</p>
+          <ul class="services__bullets dim">
+            <li v-for="b in s.bullets" :key="b">{{ b }}</li>
+          </ul>
         </li>
       </ul>
+      <p class="services__also dim">{{ t.ui.services.also }}</p>
     </div>
   </section>
 </template>
@@ -41,9 +44,9 @@ useReveal(root)
 .services__item {
   position: relative;
   display: grid;
-  gap: 10px;
+  gap: 12px;
   align-content: start;
-  min-height: clamp(180px, 22vw, 260px);
+  min-height: clamp(220px, 18vw, 300px);
   padding: 28px;
   border-right: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
@@ -52,34 +55,37 @@ useReveal(root)
   overflow: hidden;
   transition: background-color 0.5s var(--ease-out);
 }
-.services__item::after {
-  content: '';
-  position: absolute;
-  inset: auto 0 0;
-  height: 2px;
-  background: var(--accent);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.7s var(--ease-out);
-}
 .services__item:hover {
   background: color-mix(in srgb, var(--bg-2) 80%, transparent);
 }
-.services__item:hover::after {
-  transform: scaleX(1);
-}
 .services__title {
-  margin-top: auto;
   font-family: var(--font-display);
   font-weight: 400;
-  font-size: var(--fs-h3);
+  font-size: clamp(1.1rem, 1.55vw, 1.6rem);
   letter-spacing: -0.03em;
-  padding-top: 40px;
+  hyphens: auto;
+  overflow-wrap: anywhere;
 }
-@media (max-width: 1100px) {
+.services__item p {
+  color: var(--fg);
+}
+.services__bullets {
+  display: grid;
+  gap: 4px;
+  font-size: 0.875rem;
+}
+.services__bullets li::before {
+  content: '— ';
+}
+.services__also {
+  margin-top: 32px;
+}
+@media (max-width: 1279px) {
   .services__grid {
     grid-template-columns: repeat(2, 1fr);
   }
+}
+@media (max-width: 1100px) {
   .services__head {
     margin-left: 0;
   }

@@ -39,8 +39,27 @@ jobs:
 
       - run: npm ci
 
+      - name: Warn if lead endpoint is unset
+        env:
+          LEAD_ENDPOINT: ${{ vars.LEAD_ENDPOINT }}
+        run: |
+          if [ -z "$LEAD_ENDPOINT" ]; then
+            echo "::warning::LEAD_ENDPOINT unset — form will always show the error state"
+          fi
+
       - name: Generate static site
         run: npm run generate
+        env:
+          NUXT_PUBLIC_LEAD_ENDPOINT: ${{ vars.LEAD_ENDPOINT }}
+
+      # Same leak check as CI, on the artifact that actually ships (the endpoint env is set only here).
+      - name: Check static output for Telegram secrets
+        run: |
+          test -d .output/public || { echo "::error::.output/public missing"; exit 1; }
+          if grep -rEl 'bot[0-9]{6,}:|[0-9]{8,10}:[A-Za-z0-9_-]{30,}|api\.telegram\.org' .output/public; then
+            echo "::error::Telegram token or API host found in .output/public"
+            exit 1
+          fi
 
       # Pages runs Jekyll by default, which drops directories starting with "_" (Nuxt's _nuxt/).
       - name: Disable Jekyll

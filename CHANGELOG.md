@@ -3,7 +3,51 @@
 All notable changes to this project are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [0.3.0] - 2026-10-14
+## [0.4.0] - 2026-10-14
+
+CRO rework, based on the business-analyst strategy in `docs/sdlc/2026-10-cro-analysis/00-strategy.md`.
+
+### Added
+- Lead relay. The contact modal sends each lead to a Cloudflare Worker (`workers/lead-relay/`), which posts it to a Telegram chat. The bot token and chat id live only in Worker secrets. Self-check: `node workers/lead-relay/test.mjs`.
+- `app/composables/useLead.ts`. One POST per lead, 10 s timeout, double-submit guard, honeypot, 30 s client throttle. No new dependency.
+- Modal states: idle, sending, sent, error, throttled. Focus trap (`inert` on `#__nuxt`), focus moves to the first invalid field, focus returns to the trigger on close.
+- `app/components/ui/SectionCta.vue`. One shared "Bepul audit olish" button after Projects, Process and FAQ, and on case pages.
+- NDA badge on project cards and case pages (`nda: true` in `app/data/site.ts`).
+- Price anchor in the pricing block (`#pricing`): "… dan boshlab" price and "Audit — bepul, 1–2 kun".
+- Telegram link next to the hero CTA.
+- `business-analyst` agent (opus). It runs first in phase 01 and writes `00-strategy.md`.
+- CI: relay self-check, secret leak check on `.output/public`, and a deploy warning when `LEAD_ENDPOINT` is unset.
+- `.env.example` with `NUXT_PUBLIC_LEAD_ENDPOINT`.
+- `NUXT_PUBLIC_SHOW_PLACEHOLDERS=1` outlines placeholder values in dev.
+
+### Changed
+- Hero rewritten around the client outcome: "Excel o‘rniga — yagona tizim." Primary CTA "Bepul audit olish".
+- One offer across all CTAs (`ui.cta.label`). Modal title "Bepul auditga yoziling".
+- Services: 12 blocks reduced to 4 (CRM, ERP va ombor, Hujjat aylanishi, Integratsiya). Each has an outcome line and bullets. A "shuningdek" line covers the rest.
+- Sections: 9 reduced to 7 (Hero, Intro, Services, Projects, Process, FAQ/Pricing, Contact).
+- Trust signals: one numbers set (20+ tizim, 5 yil) in Intro. Values are placeholders until the owner confirms them.
+- Navigation: Xizmatlar, Loyihalar, Narxlar, Aloqa (`#services`, `#projects`, `#pricing`, `#contact`).
+- Modal form: budget is not preselected and can be cleared. Budget and message are optional. Inputs have max lengths. Consent checkbox stays required and starts unchecked.
+- Russian and English copy written by the `linguist` agent. SEO titles and descriptions updated for CRM/ERP and the free audit (`seo.uz.ts`, `seo.ru.ts`, `seo.en.ts`).
+
+### Removed
+- `StatsSection.vue`, `ExpertiseSection.vue` and their scene presets (`stats`, `expertise`).
+- Clients marquee and client data. Intro marquee. Hero awards.
+- Service tabs, tech stack list and the `ui.hero`, `ui.stats`, `ui.expertise` copy groups.
+- The "50+" card in Projects (replaced by the CTA card).
+
+### Fixed
+- The lead form no longer fakes success. A failed send or an unset endpoint shows an error, keeps the form filled and shows a Telegram link.
+- Invalid submit moves focus to the first invalid field. Success moves focus to the heading.
+- Timeout works in browsers without `AbortSignal.timeout` (AbortController fallback).
+- Placeholder labels no longer appear as tooltips in production.
+- Projects header no longer overflows at 390 px.
+
+### Notes
+- Placeholders in `app/data/site.ts`: phone, e-mail, `priceFrom` (`$1 500`), numbers 20+ and 5 yil, and the NDA flags. Confirm before go-live.
+- The relay is not deployed yet. Until `LEAD_ENDPOINT` is set, every lead shows the error state. This is a go-live blocker.
+- Conversion events (analytics) are out of scope for this release.
+
 
 ### Added
 - SEO per locale. `app/data/seo.uz.ts`, `seo.ru.ts` and `seo.en.ts` hold titles, descriptions and keywords. Each file satisfies the shared `SeoCopy` type.

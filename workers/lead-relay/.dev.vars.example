@@ -1,0 +1,4 @@
+# Copy to .dev.vars (git-ignored) for `npx wrangler dev`. Never commit real values.
+TELEGRAM_BOT_TOKEN=
+TELEGRAM_CHAT_ID=
+ALLOWED_ORIGIN=http://localhost:3000

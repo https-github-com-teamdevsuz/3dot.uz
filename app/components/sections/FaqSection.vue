@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { integrations, priceFrom } from '~/data/site'
 
 const t = useSite()
 
@@ -10,15 +11,20 @@ const toggle = (i: number) => (open.value = open.value === i ? null : i)
 </script>
 
 <template>
-  <section ref="root" class="faq section" data-scene="faq">
+  <section id="pricing" ref="root" class="faq section" data-scene="faq">
     <div class="faq__grid container">
       <div class="faq__pricing">
         <span class="eyebrow" data-reveal>{{ t.ui.faq.pricingEyebrow }}</span>
         <h2 class="h2" data-split>{{ t.ui.faq.pricingTitle }}</h2>
         <dl>
-          <div v-for="p in t.pricing" :key="p.label" class="faq__price" data-reveal>
-            <dt class="dim">{{ p.label }}</dt>
-            <dd class="display">{{ p.value }}</dd>
+          <div class="faq__price" data-reveal>
+            <dt class="dim">{{ t.pricing.audit.label }}</dt>
+            <dd class="display">{{ t.pricing.audit.value }}</dd>
+          </div>
+          <div class="faq__price" data-reveal>
+            <dt class="dim">{{ t.pricing.project.label }}</dt>
+            <dd class="display" data-placeholder>{{ t.pricing.project.from(priceFrom) }}</dd>
+            <dd class="dim">{{ t.pricing.project.note }}</dd>
           </div>
         </dl>
       </div>
@@ -43,10 +49,16 @@ const toggle = (i: number) => (open.value = open.value === i ? null : i)
           <div :id="`faq-a-${i}`" class="faq__a" role="region" :aria-labelledby="`faq-q-${i}`">
             <div class="faq__a-inner">
               <p class="dim">{{ item.a }}</p>
+              <ul v-if="i === 2" class="faq__chips" :aria-label="t.ui.faq.integrations">
+                <li v-for="n in integrations" :key="n" class="mono">{{ n }}</li>
+              </ul>
             </div>
           </div>
         </div>
       </div>
+    </div>
+    <div class="faq__cta container">
+      <SectionCta :text="t.ui.sectionCta.faq" />
     </div>
   </section>
 </template>
@@ -69,6 +81,20 @@ const toggle = (i: number) => (open.value = open.value === i ? null : i)
 .faq__price dd {
   font-size: clamp(2rem, 4vw, 3.4rem);
   margin-top: 6px;
+}
+.faq__cta {
+  margin-top: clamp(48px, 8vh, 96px);
+}
+.faq__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0 44px 28px 60px;
+}
+.faq__chips li {
+  padding: 6px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
 }
 .faq__list {
   display: grid;
@@ -141,7 +167,8 @@ const toggle = (i: number) => (open.value = open.value === i ? null : i)
     grid-template-columns: 1fr;
     gap: 64px;
   }
-  .faq__a p {
+  .faq__a p,
+  .faq__chips {
     padding-left: 0;
   }
 }

@@ -4,13 +4,7 @@ import uz from '~/data/site.uz'
 
 type Site = Omit<SiteCopy, 'projects' | 'stats'> & {
   projects: Project[]
-  stats: {
-    headline: string
-    caption: string
-    total: number
-    awards: { name: string; count: number }[]
-    numbers: { value: number; suffix: string; label: string }[]
-  }
+  stats: { numbers: { value: number; suffix: string; label: string }[] }
 }
 
 const PREFIX_RE = /^\/(ru|en)(?=\/|$)/
@@ -32,10 +26,6 @@ const build = (c: SiteCopy): Site => ({
     ...c.projects[b.slug]
   })),
   stats: {
-    headline: c.stats.headline,
-    caption: c.stats.caption,
-    total: statsBase.total,
-    awards: c.stats.awards.map((name, i) => ({ name, count: statsBase.awards[i] ?? 0 })),
     numbers: statsBase.numbers.map((n, i) => ({ ...n, label: c.stats.numbers[i] ?? '' }))
   }
 })

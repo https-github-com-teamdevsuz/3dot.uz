@@ -104,3 +104,45 @@ Decisions on the two open questions:
 - Ishga tushirish → Запуск/релиз → Launch
 - Rejim (theme) → Тема → Theme
 - Individual hisob-kitob → Индивидуальная смета → Custom quote
+
+## CRO copy
+
+Feature `2026-10-cro-analysis`. ru/en follow the binding key table in `docs/sdlc/2026-10-cro-analysis/02-architecture.md`. Length checks: H1 ru 14 + 15 chars, en 10 + 17 chars; longest word 8 chars; `ui.cta.label` is 16 chars in ru and in en.
+
+**Glossary additions (uz → ru → en)**
+
+| uz | ru | en |
+|---|---|---|
+| Bepul audit olish (`ui.cta.label`) | Бесплатный аудит | Get a free audit |
+| Bepul audit (contact circle) | Бесплатный аудит | Free audit |
+| Jarayonlar auditi | Аудит процессов | Process audit |
+| Auditga yozilish / yoziling | Записаться на аудит / Запишитесь… | Book the audit / Book your… |
+| Telegramda yozish | Написать в Telegram | Message us on Telegram |
+| Excel o‘rniga — yagona tizim. | Вместо Excel — единая система. | One system instead of Excel. |
+| … o‘rniga (service outcome) | … вместо … / … а не в … | … instead of … / not in … |
+| tartibga solish | привести в порядок | streamline |
+| Narxlar (nav) | Цены | Pricing |
+| … dan boshlab | от … | from … |
+| Majburiyat yo‘q | Ни к чему не обязывает | No obligation |
+| 1 ish kuni ichida | в течение одного рабочего дня | within one business day |
+| (ixtiyoriy) | (необязательно) | (optional) |
+| Mijoz nomi NDA ostida | Название клиента под NDA | Client name under NDA |
+| Integratsiya va avtomatlashtirish | Интеграции и автоматизация | Integration and automation |
+| ombor | склад | inventory (stock for quantities) |
+| Sizga ham shunday tizim kerakmi? (`ui.sectionCta.projects/project`) | Нужна такая же система? | Need a system like this? |
+| Birinchi qadam — bepul audit. (`ui.sectionCta.process`) | Первый шаг — бесплатный аудит. | Step one: a free audit. |
+| Savol qoldimi? Auditda javob beramiz. (`ui.sectionCta.faq`) | Остались вопросы? Ответим на аудите. | More questions? Ask us at the audit. |
+| Aniq narx — bepul auditdan keyin. (`pricing.project.note`) | Точная цена — после бесплатного аудита. | Final price follows the free audit. |
+| Ismingizni kiriting (`ui.modal.errName`) | Укажите имя | Enter your name |
+| Telefon, e-mail yoki @telegram kiriting (`errContact`) | Укажите телефон, e-mail или @telegram | Enter a phone, email or @telegram |
+| Davom etish uchun rozilik bering (`errConsent`) | Чтобы продолжить, дайте согласие | Please give consent to continue |
+| Qayta urinib ko‘rish (`ui.modal.retry`) | Попробовать ещё раз | Try again |
+| Lidlar va bitimlar voronkasi | Воронка лидов и сделок | Lead and deal pipeline |
+| Elektron kelishuv | Электронное согласование | Digital approvals |
+| Inventarizatsiya | Инвентаризация | Stocktaking |
+| 1C bilan ma’lumot almashinuvi | Обмен данными с 1С | Data exchange with 1C |
+| Telegram xabarnomalari | Уведомления в Telegram | Telegram notifications |
+
+**uz fix.** `services[3].sub` read «1C, Payme, Click va Telegram bilan qo‘lda kiritish o‘rniga.», a fragment with no predicate. It is now «Qo‘lda kiritish o‘rniga 1C, Payme, Click va Telegram bilan avtomatik almashinuv.»
+
+**Tests.** The header CTA (old «Loyihani muhokama qilish» / «Обсудить проект» / «Discuss a project») is gone in every locale. qa-engineer covers this in task Q1.

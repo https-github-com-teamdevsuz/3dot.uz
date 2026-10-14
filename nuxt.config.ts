@@ -17,6 +17,10 @@ export default defineNuxtConfig({
   compatibilityDate: '2026-10-01',
   devtools: { enabled: true },
 
+  runtimeConfig: {
+    public: { leadEndpoint: 'https://lead-relay.example.workers.dev/lead', showPlaceholders: '' }
+  },
+
   css: ['~/assets/css/fonts.css', '~/assets/css/main.css'],
 
   // <HeroSection/> instead of <SectionsHeroSection/>

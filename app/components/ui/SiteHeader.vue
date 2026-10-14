@@ -50,7 +50,7 @@ watch(menuOpen, (open) => {
       <LangSwitch class="header__lang" />
       <ThemeToggle class="header__theme" />
 
-      <button class="btn header__cta" type="button" @click="show">{{ t.ui.header.cta }}</button>
+      <button class="btn header__cta" type="button" data-cta="header" @click="show">{{ t.ui.cta.label }}</button>
 
       <button
         class="header__burger"
@@ -74,7 +74,7 @@ watch(menuOpen, (open) => {
         <div class="menu__footer container">
           <LangSwitch pills />
           <a :href="`mailto:${email}`">{{ email }}</a>
-          <button class="btn btn--solid" type="button" @click="menuOpen = false; show()">{{ t.ui.header.cta }}</button>
+          <button class="btn btn--solid" type="button" @click="menuOpen = false; show()">{{ t.ui.cta.label }}</button>
         </div>
       </div>
     </Transition>

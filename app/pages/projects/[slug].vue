@@ -23,6 +23,7 @@ useReveal(root)
     <header class="case__hero container" data-scene="detail">
       <NuxtLink :to="localePath('/') + '#projects'" class="mono dim case__back">{{ t.ui.project.back }}</NuxtLink>
       <span class="eyebrow" data-reveal>{{ project.year }} · {{ project.tags.join(' / ') }}</span>
+      <span v-if="project.nda" class="badge badge--inline mono" data-reveal>{{ t.ui.project.nda }}</span>
       <h1 class="case__title display" data-split>{{ project.title }}</h1>
       <p class="lead dim case__summary" data-reveal>{{ project.summary }}</p>
     </header>
@@ -49,6 +50,10 @@ useReveal(root)
         </div>
       </dl>
       <p class="lead" data-scrub-words>{{ project.description }}</p>
+    </section>
+
+    <section class="case__cta container">
+      <SectionCta :text="t.ui.sectionCta.project" />
     </section>
 
     <NuxtLink :to="localePath(`/projects/${next.slug}`)" class="case__next" data-scene="contact" :data-cursor="t.ui.project.nextCursor">
@@ -99,6 +104,12 @@ useReveal(root)
 .case__facts dd {
   margin-top: 6px;
   font-size: 1.1rem;
+}
+.case__cta {
+  display: grid;
+  justify-items: start;
+  gap: 24px;
+  padding-bottom: clamp(48px, 8vh, 96px);
 }
 .case__next {
   display: grid;

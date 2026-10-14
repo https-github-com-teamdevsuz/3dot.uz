@@ -48,6 +48,7 @@ onBeforeUnmount(() => {
           </div>
         </li>
         </ol>
+        <SectionCta class="process__cta" :text="t.ui.sectionCta.process" />
       </div>
     </div>
   </section>
@@ -88,6 +89,10 @@ onBeforeUnmount(() => {
   background: var(--accent-ink);
   transform-origin: top;
   box-shadow: var(--glow);
+}
+.process__cta {
+  justify-self: start;
+  margin-top: clamp(48px, 8vh, 96px);
 }
 .process__step {
   display: grid;

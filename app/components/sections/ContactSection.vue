@@ -33,7 +33,7 @@ const onLeave = () => {
       <h2 class="contact__title display" data-split>{{ t.ui.contact.title }}</h2>
 
       <div class="contact__magnet" @pointermove="onMove" @pointerleave="onLeave">
-        <button ref="button" type="button" class="contact__btn" :data-cursor="t.ui.contact.cursor" @click="show">
+        <button ref="button" type="button" class="contact__btn" data-cta="contact" :data-cursor="t.ui.contact.cursor" @click="show">
           <span>{{ t.ui.contact.button }}</span>
         </button>
       </div>
@@ -60,8 +60,9 @@ const onLeave = () => {
   gap: 40px;
 }
 .contact__title {
-  font-size: var(--fs-h1);
-  max-width: 12ch;
+  font-size: var(--fs-h2);
+  max-width: 22ch;
+  text-wrap: balance;
 }
 .contact__magnet {
   padding: 40px;

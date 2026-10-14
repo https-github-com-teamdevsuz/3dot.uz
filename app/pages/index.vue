@@ -3,9 +3,7 @@
     <HeroSection />
     <IntroSection />
     <ServicesGrid />
-    <StatsSection />
     <ProjectsSection />
-    <ExpertiseSection />
     <ProcessSection />
     <FaqSection />
     <ContactSection />

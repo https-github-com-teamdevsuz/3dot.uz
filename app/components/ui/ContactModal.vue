@@ -4,34 +4,54 @@ import { telegram } from '~/data/site'
 const { open, hide } = useContactModal()
 const nuxtApp = useNuxtApp()
 const t = useSite()
-const sent = ref(false)
-const sending = ref(false)
-const form = reactive({ name: '', contact: '', budget: t.value.budgets[1] ?? '', message: '', agree: false })
+const { status, send, reset } = useLead()
+const form = reactive({ name: '', contact: '', budget: '', message: '', hp: '', agree: false })
 const dialog = ref<HTMLElement | null>(null)
+let returnTo: HTMLElement | null = null
 
-const submit = async () => {
-  if (!form.agree) return
-  sending.value = true
-  // TODO(backend): POST to /api/contact (see docs/sdlc for the planned endpoint)
-  await new Promise((r) => setTimeout(r, 900))
-  sending.value = false
-  sent.value = true
+const tried = ref(false)
+const bad = computed(() => ({
+  name: !form.name.trim(),
+  contact: !form.contact.trim(),
+  agree: !form.agree
+}))
+const submit = () => {
+  tried.value = true
+  if (bad.value.name || bad.value.contact || bad.value.agree) {
+    nextTick(() => dialog.value?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus())
+    return
+  }
+  send(form)
 }
+const pickBudget = (b: string) => (form.budget = form.budget === b ? '' : b)
 
+const setInert = (v: boolean) => document.getElementById('__nuxt')?.toggleAttribute('inert', v)
 const onKey = (e: KeyboardEvent) => e.key === 'Escape' && hide()
 
 watch(open, (v) => {
   if (v) {
-    form.budget = t.value.budgets[1] ?? ''
+    returnTo = document.activeElement as HTMLElement | null
+    form.budget = ''
+    form.agree = false
+    tried.value = false
     nuxtApp.$lenis?.stop()
+    setInert(true)
     window.addEventListener('keydown', onKey)
     nextTick(() => dialog.value?.querySelector<HTMLElement>('input')?.focus())
   } else {
     nuxtApp.$lenis?.start()
+    setInert(false)
     window.removeEventListener('keydown', onKey)
-    setTimeout(() => (sent.value = false), 600)
+    nextTick(() => returnTo?.focus())
+    setTimeout(reset, 600)
   }
 })
+onBeforeUnmount(() => {
+  window.removeEventListener('keydown', onKey)
+  setInert(false)
+})
+
+watch(status, (v) => v === 'sent' && nextTick(() => document.getElementById('modal-title')?.focus()))
 </script>
 
 <template>
@@ -41,42 +61,60 @@ watch(open, (v) => {
         <div ref="dialog" class="modal__panel" data-lenis-prevent>
           <button class="modal__close" type="button" :aria-label="t.ui.modal.close" @click="hide">×</button>
 
-          <template v-if="!sent">
+          <template v-if="status !== 'sent'">
             <h2 id="modal-title" class="h2">{{ t.ui.modal.title }}</h2>
-            <form class="modal__form" @submit.prevent="submit">
+            <p class="modal__note dim">{{ t.ui.modal.note }}</p>
+            <form class="modal__form" novalidate :aria-busy="status === 'sending'" @submit.prevent="submit">
               <label class="field">
                 <span class="mono dim">{{ t.ui.modal.name }}</span>
-                <input v-model="form.name" required autocomplete="name" type="text" />
+                <input v-model="form.name" required maxlength="100" autocomplete="name" type="text" :aria-invalid="tried && bad.name" :aria-describedby="tried && bad.name ? 'err-name' : undefined" />
+                <span v-if="tried && bad.name" id="err-name" class="field__err">{{ t.ui.modal.errName }}</span>
               </label>
               <label class="field">
                 <span class="mono dim">{{ t.ui.modal.contact }}</span>
-                <input v-model="form.contact" required type="text" />
+                <input v-model="form.contact" required maxlength="100" autocomplete="off" autocapitalize="off" spellcheck="false" type="text" :aria-invalid="tried && bad.contact" :aria-describedby="tried && bad.contact ? 'err-contact' : undefined" />
+                <span v-if="tried && bad.contact" id="err-contact" class="field__err">{{ t.ui.modal.errContact }}</span>
               </label>
-              <fieldset class="field">
-                <legend class="mono dim">{{ t.ui.modal.budget }}</legend>
+              <div class="field" role="group" aria-labelledby="modal-budget">
+                <span id="modal-budget" class="mono dim">{{ t.ui.modal.budget }}</span>
                 <div class="chips">
-                  <label v-for="b in t.budgets" :key="b" class="chip" :class="{ 'is-active': form.budget === b }">
-                    <input v-model="form.budget" type="radio" name="budget" :value="b" class="visually-hidden" />
-                    {{ b }}
-                  </label>
+                  <button
+                    v-for="b in t.budgets"
+                    :key="b"
+                    type="button"
+                    class="chip"
+                    :class="{ 'is-active': form.budget === b }"
+                    :aria-pressed="form.budget === b"
+                    @click="pickBudget(b)"
+                  >
+                    <span v-if="form.budget === b" aria-hidden="true">✓ </span>{{ b }}
+                  </button>
                 </div>
-              </fieldset>
+              </div>
               <label class="field">
                 <span class="mono dim">{{ t.ui.modal.message }}</span>
-                <textarea v-model="form.message" rows="3" />
+                <textarea v-model="form.message" rows="3" maxlength="1000" />
               </label>
+              <div class="hp" aria-hidden="true">
+                <input v-model="form.hp" type="text" name="website" tabindex="-1" autocomplete="off" />
+              </div>
               <label class="agree">
-                <input v-model="form.agree" type="checkbox" required />
+                <input v-model="form.agree" type="checkbox" required :aria-invalid="tried && bad.agree" :aria-describedby="tried && bad.agree ? 'err-agree' : undefined" />
                 <span class="dim">{{ t.ui.modal.consent }}</span>
+                <span v-if="tried && bad.agree" id="err-agree" class="field__err">{{ t.ui.modal.errConsent }}</span>
               </label>
-              <button class="btn btn--solid" type="submit" :disabled="sending">
-                {{ sending ? t.ui.modal.sending : t.ui.modal.send }}
+              <p v-if="status === 'error' || status === 'throttled'" class="modal__alert" :class="{ 'is-error': status === 'error' }" :role="status === 'error' ? 'alert' : 'status'">
+                {{ status === 'error' ? t.ui.modal.error : t.ui.modal.throttled }}
+                <a v-if="status === 'error'" :href="telegram" target="_blank" rel="noopener">{{ t.ui.modal.telegram }} ↗</a>
+              </p>
+              <button class="btn btn--solid" type="submit" :aria-disabled="status === 'sending'" data-cta="submit" @click="status === 'sending' && $event.preventDefault()">
+                {{ status === 'sending' ? t.ui.modal.sending : status === 'error' ? t.ui.modal.retry : t.ui.modal.send }}
               </button>
             </form>
           </template>
 
-          <div v-else class="modal__done">
-            <h2 id="modal-title" class="h2">{{ t.ui.modal.doneTitle }}</h2>
+          <div v-else class="modal__done" aria-live="polite">
+            <h2 id="modal-title" class="h2" tabindex="-1">{{ t.ui.modal.doneTitle }}</h2>
             <p class="lead dim">{{ t.ui.modal.doneText }}</p>
             <a class="btn" :href="telegram" target="_blank" rel="noopener">{{ t.ui.modal.telegram }}</a>
           </div>
@@ -145,6 +183,13 @@ watch(open, (v) => {
   outline: none;
   transition: border-color 0.3s;
 }
+.field__err {
+  color: var(--danger, #ff6b6b);
+  font-size: 0.8125rem;
+}
+.field input[aria-invalid='true'] {
+  border-color: var(--danger, #ff6b6b);
+}
 .field input:focus,
 .field textarea:focus {
   border-color: var(--accent-ink);
@@ -156,6 +201,9 @@ watch(open, (v) => {
   margin-top: 8px;
 }
 .chip {
+  min-height: 44px;
+  color: inherit;
+  font: inherit;
   padding: 10px 18px;
   border-radius: 999px;
   border: 1px solid var(--line-strong);
@@ -167,7 +215,7 @@ watch(open, (v) => {
   border-color: var(--accent-ink);
   color: var(--on-accent);
 }
-.chip:focus-within {
+.chip:focus-visible {
   outline: 2px solid var(--accent-ink);
   outline-offset: 2px;
 }
@@ -182,7 +230,33 @@ watch(open, (v) => {
   width: 18px;
   height: 18px;
 }
+.modal__note {
+  margin: -24px 0 32px;
+}
+.hp {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.modal__alert {
+  padding: 16px;
+  border: 1px solid var(--line-strong);
+  border-radius: 14px;
+}
+.modal__alert.is-error {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+.modal__alert a {
+  display: block;
+  margin-top: 8px;
+  color: var(--fg);
+  text-decoration: underline;
+}
 .modal__form .btn {
+  min-width: 220px;
   justify-self: start;
 }
 .modal__done {
@@ -206,5 +280,9 @@ watch(open, (v) => {
 .modal-enter-from .modal__panel,
 .modal-leave-to .modal__panel {
   transform: translateX(100%);
+}
+.btn[aria-disabled='true'] {
+  opacity: 0.6;
+  cursor: progress;
 }
 </style>

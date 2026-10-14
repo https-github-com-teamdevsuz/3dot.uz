@@ -59,6 +59,10 @@
     "performance-engineer": {
       "model": "opus",
       "why": "Hands-on optimisation across build, fonts and runtime needs the strongest model"
+    },
+    "business-analyst": {
+      "model": "opus",
+      "why": "Lead BA & CRO: conversion strategy and copy judgement need the strongest model"
     }
   },
   "phases": [
@@ -66,12 +70,15 @@
       "id": "01-requirements",
       "name": "Requirements",
       "agents": [
+        "business-analyst",
         "product-analyst"
       ],
       "outputs": [
+        "00-strategy.md",
         "01-requirements.md"
       ],
-      "gate": "human-approval"
+      "gate": "human-approval",
+      "note": "business-analyst runs first; product-analyst turns the approved strategy into requirements"
     },
     {
       "id": "02-design",
@@ -167,6 +174,8 @@
     ],
     "devops-engineer": [
       ".github/**",
+      "workers/**",
+      ".env.example",
       "nuxt.config.ts (build/nitro sections only)"
     ],
     "tech-writer": [
@@ -190,6 +199,9 @@
       "nuxt.config.ts (vite/build/app.head/nitro perf sections)",
       "public/fonts/**",
       "app/assets/css/fonts.css"
+    ],
+    "business-analyst": [
+      "docs/sdlc/<feature>/00-strategy.md (read-only on code)"
     ]
   },
   "budgets": {

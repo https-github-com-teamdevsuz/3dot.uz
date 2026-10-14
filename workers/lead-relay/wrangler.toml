@@ -1,0 +1,7 @@
+name = "lead-relay"
+main = "worker.js"
+compatibility_date = "2025-09-01"
+
+# Secrets (set with `npx wrangler secret put`, never put here): TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
+[vars]
+ALLOWED_ORIGIN = "https://3dot.uz"

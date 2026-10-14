@@ -3,48 +3,29 @@ import type { SiteCopy } from './site'
 // English (US) — edited by the linguist from site.uz.ts (glossary: docs/sdlc/2026-10-i18n-theme/10-localization.md).
 export default {
   site: {
-    tagline: ['digital.', 'systems.', 'growth'],
+    tagline: ['One system', 'instead of Excel.'],
     role: 'digital solutions',
     city: 'Tashkent',
-    heroLead: 'One system instead of paper, spreadsheets and scattered apps. CRM, ERP and process automation.',
+    heroLead: 'CRM and ERP for sales, inventory and documents. We review your processes for free and show you what’s worth automating.',
     intro:
       'We digitize how businesses and government agencies work: from paper and Excel sheets to orderly, automated systems. Every solution is built around the way you actually work.',
     nav: [
-      { label: 'Company', hash: '#intro' },
-      { label: 'Projects', hash: '#projects' },
       { label: 'Services', hash: '#services' },
+      { label: 'Projects', hash: '#projects' },
+      { label: 'Pricing', hash: '#pricing' },
       { label: 'Contact', hash: '#contact' }
     ]
   },
-  servicesTitle: 'Digital solutions',
+  servicesTitle: 'Which process should we streamline?',
   services: [
-    { title: 'CRM systems', sub: 'Customers / Sales / Pipeline' },
-    { title: 'ERP and inventory', sub: 'Production / Inventory / Finance' },
-    { title: 'Automation', sub: 'Business processes / Bots' },
-    { title: 'Document management', sub: 'E-documents / Assignment tracking' },
-    { title: 'Web applications', sub: 'Client portals / Intranets / SaaS' },
-    { title: 'Websites', sub: 'Corporate / Landing pages / 3D' },
-    { title: 'E-commerce', sub: 'Online stores / Payments' },
-    { title: 'Integrations', sub: '1C / API / Payme / Click' },
-    { title: 'Mobile apps', sub: 'iOS / Android' },
-    { title: 'Analytics and BI', sub: 'Dashboards / Reports' },
-    { title: 'SEO and SMM', sub: 'Traffic / Content / Ads' },
-    { title: 'Support', sub: 'Monitoring / SLA / Enhancements' }
+    { title: 'CRM', sub: 'Customers and sales in one place, not in Excel.', bullets: ['Lead and deal pipeline', 'Reminders and tasks', 'Sales reports'] },
+    { title: 'ERP and inventory', sub: 'Stock, purchasing and orders in real time.', bullets: ['Live stock levels', 'Purchase and order control', 'Stocktaking'] },
+    { title: 'Document management', sub: 'Digital approvals and tracking instead of paper.', bullets: ['Digital approvals', 'Deadline and execution control', 'Document archive'] },
+    { title: 'Integrations', sub: '1C, Payme, Click and Telegram share data on their own, with no manual entry.', bullets: ['Data exchange with 1C', 'Payme and Click payments', 'Telegram notifications'] }
   ],
   stats: {
-    headline: 'Proven at rolling out complex systems',
-    caption: 'business processes automated',
-    awards: ['Public sector', 'Retail', 'Manufacturing', 'Logistics'],
     numbers: ['Systems delivered', 'Years in business']
   },
-  serviceTabs: [
-    { title: 'Digitalization', text: 'We map your processes and turn them into a system', items: ['Audit', 'CRM / ERP', 'Document management', 'Bots'] },
-    { title: 'Development', text: 'Web, mobile and backend — one team', items: ['Nuxt / Vue', 'Node.js / Laravel', 'Flutter', 'PostgreSQL'] },
-    { title: 'Integration', text: 'We connect the software you already use', items: ['1C', 'Payme / Click', 'Telegram', 'API'] },
-    { title: 'Marketing', text: 'The system is live — now bring in the customers', items: ['SEO', 'SMM', 'Google Ads', 'Yandex Direct'] },
-    { title: 'Support', text: 'We stay with you after launch', items: ['Monitoring', 'SLA', 'Training', 'Enhancements'] }
-  ],
-  stack: ['Nuxt / Vue', 'Node.js', 'Laravel', 'PostgreSQL', '1C integration', 'Telegram API', 'Docker / DevOps', 'three.js'],
   process: [
     { title: 'Audit', text: 'We study your processes and find where time and money leak' },
     { title: 'Design', text: 'Technical specification, system architecture and a UI prototype' },
@@ -53,10 +34,10 @@ export default {
     { title: 'Training', text: 'We train your team and write the user guides' },
     { title: 'Support', text: 'Monitoring, bug fixes and ongoing improvements' }
   ],
-  pricing: [
-    { label: 'Process audit and consultation', value: 'free' },
-    { label: 'Project cost', value: 'custom quote' }
-  ],
+  pricing: {
+    audit: { label: 'Process audit', value: 'free, 1–2 days' },
+    project: { label: 'Project cost', from: (p: string) => `from ${p}`, note: 'Final price follows the free audit.' }
+  },
   faq: [
     {
       q: 'We run everything in Excel. Where do we start?',
@@ -122,59 +103,59 @@ export default {
   },
   ui: {
     skipLink: 'Skip to main content',
+    cta: { label: 'Get a free audit', telegram: 'Message us on Telegram' },
+    sectionCta: { projects: 'Need a system like this?', process: 'Step one: a free audit.', faq: 'More questions? Ask us at the audit.', project: 'Need a system like this?' },
     header: {
       logoAria: '3dot — home',
       navAria: 'Main menu',
-      cta: 'Discuss a project',
       menuOpen: 'Open menu',
       menuClose: 'Close menu'
     },
     modal: {
       close: 'Close',
-      title: 'Hello! Let’s talk about your next project',
+      title: 'Book your free audit',
+      note: 'We’ll get back to you within one business day. No obligation.',
       name: 'Your name',
       contact: 'Phone, email or @telegram',
-      budget: 'Budget',
-      message: 'Message',
+      budget: 'Rough budget (optional)',
+      message: 'Message (optional)',
       consent: 'I agree to the processing of my personal data',
-      send: 'Send',
+      send: 'Book the audit',
       sending: 'Sending…',
       doneTitle: 'Thank you!',
       doneText: 'We’ll review your request and get back to you shortly.',
-      telegram: 'Message us on Telegram'
+      error: 'We couldn’t send your request. Message us on Telegram or try again.',
+      throttled: 'Request sent. Please wait 30 seconds before sending another.',
+      telegram: 'Message us on Telegram',
+      errName: 'Enter your name',
+      errContact: 'Enter a phone, email or @telegram',
+      errConsent: 'Please give consent to continue',
+      retry: 'Try again'
     },
     footer: { navAria: 'Footer navigation' },
-    hero: { scroll: 'scroll', index: '(IT solutions ’26)', cta: 'Discuss a project' },
     intro: { eyebrow: 'about the studio' },
-    services: { eyebrow: 'services' },
-    stats: { eyebrow: 'experience' },
+    services: { eyebrow: 'services', also: 'Also: websites, mobile apps, BI' },
     projects: {
       eyebrow: 'selected work',
       title: 'Projects',
       count: (n: number) => `${n} ${n === 1 ? 'case study' : 'case studies'}`,
       cursor: 'View'
     },
-    expertise: {
-      eyebrow: 'expertise',
-      title: 'A tailored approach to every task',
-      tabsAria: 'Service areas',
-      stackLabel: 'our stack',
-      clientsAria: 'Clients'
-    },
     process: {
       eyebrow: 'process',
       title: 'How we work',
       text: 'Every stage ends with a concrete deliverable, so you always know where the project stands.'
     },
-    faq: { pricingEyebrow: 'pricing', pricingTitle: 'What does a project cost?', eyebrow: 'frequently asked questions' },
-    contact: { eyebrow: 'let’s get to know each other', title: 'Got a project in mind?', button: 'Get in touch', cursor: 'Write us' },
+    faq: { integrations: 'Integrations', pricingEyebrow: 'pricing', pricingTitle: 'What does a project cost?', eyebrow: 'frequently asked questions' },
+    contact: { eyebrow: 'let’s get to know each other', title: 'We’ll show you where your processes lose time — for free', button: 'Free audit', cursor: 'Audit' },
     project: {
       back: '← all projects',
       year: 'Year',
       stack: 'Stack',
       results: 'Results',
       next: 'next project',
-      nextCursor: 'Next'
+      nextCursor: 'Next',
+      nda: 'Client name under NDA'
     },
     error: {
       code: 'error',

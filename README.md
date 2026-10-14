@@ -18,22 +18,54 @@ Node.js 20.19+ (tavsiya: 22).
 | `npm run generate` | Statik sayt (`.output/public`, 21 ta HTML sahifa) va `sitemap.xml` — hosting uchun |
 | `npm run typecheck` | TypeScript tekshiruvi |
 | `npm run test:e2e` | Playwright testlari (avval `npm run generate`; birinchi marta `npx playwright install chromium`). Band mashinada: `npx playwright test --workers=2` |
+| `node workers/lead-relay/test.mjs` | Lid relay (Cloudflare Worker) self-check |
 | `npm run agents:check` | Har bir agent o‘z modeliga bog‘langanini tekshiradi |
 | `npm run sdlc:status` | Pipeline bo‘yicha feature’lar holati |
 
 ## Sayt tarkibi
 
-Preloader → Hero (`design. motion. technology`) → Studiya haqida (marquee + skroll bilan yonadigan matn) → 12 ta xizmat → Mukofotlar va hisoblagichlar → Gorizontal pin qilingan loyihalar → Ekspertiza tablari, stek, mijozlar marquee → Ish bosqichlari → Narxlar + FAQ → Magnit CTA → Footer. Har bir loyiha uchun `/projects/<slug>` sahifasi, kontakt formasi (modal), custom cursor, film grain, `prefers-reduced-motion` va WebGL yo‘q bo‘lgandagi fallback.
+Preloader → Hero (`Excel o‘rniga — yagona tizim.`, «Bepul audit olish» tugmasi va Telegram havolasi) → Kirish (qisqa tanishtiruv va yagona raqamlar: 20+ tizim, 5 yil) → 4 ta xizmat (CRM, ERP va ombor, Hujjat aylanishi, Integratsiya) → Gorizontal pin qilingan loyihalar (NDA belgisi, oxirida CTA) → Ish bosqichlari (oxirida CTA) → Narxlar + FAQ (`#pricing`, oxirida CTA) → Aloqa → Footer. Jami 7 bo‘lim. Har bir loyiha uchun `/projects/<slug>` sahifasi (oxirida CTA), kontakt formasi (modal), custom cursor, film grain, `prefers-reduced-motion` va WebGL yo‘q bo‘lgandagi fallback.
 
 ## Qanday tahrirlash
 
-- **Matnlar, loyihalar, xizmatlar, narxlar** — `app/data/site.uz.ts`, `site.ru.ts`, `site.en.ts` (har bir til). Umumiy ma’lumotlar (brend, kontaktlar, mijozlar, loyiha slug’lari, `SITE_URL`) — `app/data/site.ts`. Brend nomi `brand`. Logotip — `app/components/ui/BrandLogo.vue` (SVG manbalari va boshqa konsepsiyalar `brand/` papkasida). Demo loyihalar va mijozlar — o‘ylab topilgan, o‘zingiznikiga almashtiring.
+- **Matnlar, xizmatlar, narxlar** — `app/data/site.uz.ts`, `site.ru.ts`, `site.en.ts` (har bir til). Umumiy ma’lumotlar (brend, kontaktlar, loyiha slug’lari, `SITE_URL`, narx, raqamlar, NDA belgisi) — `app/data/site.ts`. Brend nomi `brand`. Logotip — `app/components/ui/BrandLogo.vue` (SVG manbalari va boshqa konsepsiyalar `brand/` papkasida). Demo loyihalar — o‘ylab topilgan, o‘zingiznikiga almashtiring.
+- **CTA matni** — bitta kalit: `ui.cta.label` (uz/ru/en). Header, hero, bo‘lim oxiridagi tugmalar va keys sahifasi shundan oladi. Modal sarlavhasi — `ui.modal.title`.
+- **Narx va raqamlar (PLACEHOLDER)** — `app/data/site.ts`: `priceFrom` (`$1 500`) va `statsBase.numbers` (20+, 5). Biznes tasdiqlagach, almashtiring. Placeholder’larni ko‘rish uchun:
+
+  ```bash
+  NUXT_PUBLIC_SHOW_PLACEHOLDERS=1 npm run dev
+  ```
+
+  PowerShell’da: `$env:NUXT_PUBLIC_SHOW_PLACEHOLDERS=1; npm run dev`. Ishlab chiqarish buildida bu belgi chiqmaydi.
 - **3D shar har bo‘limda qanday turishi** — `app/webgl/scenePresets.ts` (`x, y, scale, distort, frequency, tint, satellites`).
 - **Ranglar, shriftlar** — `app/assets/css/main.css` dagi `:root` (dark) va `:root[data-theme='light']` tokenlari. 3D shar palitrasi — `SCENE_PALETTES` (`app/webgl/scenePresets.ts`).
 - **Shader / yorug‘lik** — `app/webgl/LiquidScene.ts` (`buildEnvironment`, `liquid()` GLSL funksiyasi).
 - **SEO matnlari** (title, description, keywords) — `app/data/seo.uz.ts`, `seo.ru.ts`, `seo.en.ts`. Pastdagi “SEO” bo‘limiga qarang.
 - **Shriftlar** — `public/fonts/` va `app/assets/css/fonts.css`. Pastdagi “Shriftlar va performance” bo‘limiga qarang.
-- **Kontakt formasi** — hozircha demo (`ContactModal.vue` → `submit`). Telegram bot yoki `server/api/contact.post.ts` ga ulang.
+- **Lid formasi** — `ContactModal.vue` va `app/composables/useLead.ts`. Yuborish manzili — `NUXT_PUBLIC_LEAD_ENDPOINT`. Pastdagi “Lid relay (Telegram)” bo‘limiga qarang.
+
+## Lid relay (Telegram)
+
+Kontakt formasi so‘rovni Cloudflare Worker ga yuboradi. Worker uni Telegram botiga jo‘natadi. Bot tokeni va chat id faqat Worker sirlarida turadi. Ular saytda va `.output/public` da yo‘q.
+
+1. Forma `app/composables/useLead.ts` orqali `NUXT_PUBLIC_LEAD_ENDPOINT` manziliga JSON yuboradi (`text/plain`, 10 soniya kutish).
+2. Worker (`workers/lead-relay/worker.js`) so‘rovni tekshiradi: hajm, maydonlar, Origin va IP bo‘yicha cheklov. Keyin Telegramga yuboradi.
+3. Muvaffaqiyatda forma “qabul qilindi” holatini ko‘rsatadi. Xatoda (5xx, tarmoq, timeout, manzil yo‘q) forma to‘ldirilgan holda qoladi va “Telegramda yozish” havolasi chiqadi. Soxta muvaffaqiyat yo‘q.
+
+Himoya: honeypot maydoni (`website`), mijoz tomonida 30 soniyalik cheklov, Worker’da IP boshiga 5 so‘rov / 10 daqiqa (bitta nusxa ichida).
+
+Manzil build vaqtida o‘rnatiladi. `NUXT_PUBLIC_LEAD_ENDPOINT` ni o‘zgartirgandan keyin sayt qayta yig‘ilishi kerak. Deploy’da bu repo o‘zgaruvchisi `LEAD_ENDPOINT` orqali beriladi. Demo manzil (`lead-relay.example.workers.dev`) bilan forma har doim xato holatini ko‘rsatadi. Go-live oldidan haqiqiy manzilni qo‘ying.
+
+Lokal sinov:
+
+```bash
+node workers/lead-relay/test.mjs      # self-check
+cd workers/lead-relay && npx wrangler dev
+```
+
+Lokal relay bilan ishlash uchun `.env` da `NUXT_PUBLIC_LEAD_ENDPOINT=http://localhost:8787/lead` qo‘ying.
+
+Egasi uchun qadamlar (BotFather, `wrangler secret put`, `wrangler deploy`, `LEAD_ENDPOINT`): `workers/lead-relay/README.md` va `docs/sdlc/2026-10-cro-analysis/08-release.md`.
 
 ## Tillar
 
@@ -42,13 +74,13 @@ Uchta til: `uz` (standart, prefikssiz — `/`), `ru` (`/ru`), `en` (`/en`). Loyi
 1. Manba — `app/data/site.uz.ts`. `SiteCopy` tipi shu fayldan olinadi.
 2. `site.ru.ts` va `site.en.ts` — `satisfies SiteCopy` bilan yoziladi. Kalit yoki massiv yetishmasa, `npm run typecheck` xato beradi.
 3. Yangi matn: avval `site.uz.ts` ga, keyin ikkala faylga qo‘shing.
-4. Yangi loyiha: `app/data/site.ts` dagi `projectBase` ga qo‘shing, so‘ng har bir til faylida `projects` ga tarjima qo‘shing.
+4. Yangi loyiha: `app/data/site.ts` dagi `projectBase` ga qo‘shing (`nda` maydonini ham), so‘ng har bir til faylida `projects` ga tarjima qo‘shing.
 
 Routelar: `nuxt.config.ts` dagi `pages:extend` hook har bir sahifani `/ru` va `/en` ostida nusxalaydi. `nitro.prerender.routes` har bir til uchun bosh sahifa va loyiha sahifalarini yaratadi. `npm run generate` 21 ta HTML sahifa chiqaradi. Har bir sahifada `hreflang` (uz, ru, en, x-default) va canonical bo‘ladi.
 
 Til tanlovi `localStorage` da `3dot:locale` kalitida saqlanadi. Saqlangan `ru` yoki `en` prefikssiz URL ni bir marta yo‘naltiradi. `uz` tanlovi yo‘naltirmaydi.
 
-`ru` va `en` matnlari hozircha qoralama. Ona tilli kishi tekshirishi kerak.
+`ru` va `en` matnlari `linguist` agenti tomonidan yangilangan. Ona tilli kishi tekshirishi tavsiya etiladi.
 
 ## Mavzu (dark / light)
 
@@ -93,11 +125,13 @@ Claude Code’da loyiha papkasini ochib:
 /sdlc Loyihalar sahifasiga filtr va 3D hover effekt qo'shish
 ```
 
+`/sdlc` endi strategiya auditi bilan boshlanadi. Avval `business-analyst` (opus) `00-strategy.md` yozadi: muammolar, CTA va takliflar. Inson tasdig‘idan keyin `product-analyst` (sonnet) `01-requirements.md` yozadi.
+
 Orkestrator har bir bosqichni o‘z agentiga topshiradi, artefaktlar `docs/sdlc/<feature-id>/` ga yoziladi:
 
 | Bosqich | Agent | Model | Natija |
 |---|---|---|---|
-| 01 Talablar | product-analyst | sonnet | 01-requirements.md |
+| 01 Strategiya → Talablar | business-analyst → product-analyst | opus → sonnet | 00-strategy.md, 01-requirements.md |
 | 02 Arxitektura ∥ Dizayn | solution-architect ∥ ui-ux-designer | opus ∥ sonnet | 02-architecture.md, 03-design-spec.md |
 | 03 Ishlab chiqish | webgl-engineer ∥ frontend-developer ∥ linguist ∥ seo-specialist ∥ performance-engineer | opus ∥ sonnet ∥ opus ∥ opus ∥ opus | kod + 04-implementation.md |
 | 04 Code review | code-reviewer | opus | 05-review.md |
@@ -105,7 +139,7 @@ Orkestrator har bir bosqichni o‘z agentiga topshiradi, artefaktlar `docs/sdlc/
 | 06 Reliz | devops-engineer | haiku | 08-release.md |
 | 07 Hujjatlar | tech-writer | haiku | 09-handoff.md |
 
-Gate’lar: 01 va 02 dan keyin hamda deploydan oldin — inson tasdig‘i; review `CHANGES_REQUESTED` bo‘lsa — 03 ga qaytish (maks. 2 marta); test/perf `PASS` bo‘lishi shart.
+Gate’lar: 00/01 dan keyin (strategiya va talablar), 02 dan keyin hamda deploydan oldin — inson tasdig‘i; review `CHANGES_REQUESTED` bo‘lsa — 03 ga qaytish (maks. 2 marta); test/perf `PASS` bo‘lishi shart.
 
 ### Har bir agent o‘z modelida ishlashi qanday kafolatlanadi
 
@@ -118,8 +152,4 @@ Modelni almashtirish uchun: `pipeline.json` va agent faylini birga o‘zgartirin
 
 ## CI/CD
 
-Deploy qadamlari, repo sozlamalari va rollback: `docs/sdlc/2026-10-i18n-theme/08-release.md`.
-
-`.github/workflows/ci.yml`: agentlar tekshiruvi → typecheck → `generate` → Playwright (desktop / mobile / reduced-motion) → GitHub Pages deploy (`main`). Deploydan oldin inson tasdig‘i uchun repo sozlamalarida `github-pages` environment’ga *required reviewers* qo‘shing.
-#   3 d o t . u z  
- 
+`.github/workflows/ci.yml`: agentlar tekshiruvi → lid relay self-check → typecheck → `generate` → maxfiy ma’lumot tekshiruvi (`.output/public` da bot tokeni yo‘q) → Playwright (desktop / mobile / reduced-motion) → GitHub Pages deploy (`main`). Deploy `LEAD_ENDPOINT` repo o‘zgaruvchisini build’ga beradi. Deploy qadamlari, repo sozlamalari va rollback: `docs/sdlc/2026-10-i18n-theme/08-release.md` (sayt) va `docs/sdlc/2026-10-cro-analysis/08-release.md` (lid relay). Deploydan oldin inson tasdig‘i uchun repo sozlamalarida `github-pages` environment’ga *required reviewers* qo‘shing.

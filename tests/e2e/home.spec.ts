@@ -17,24 +17,22 @@ test.describe('home page', () => {
     const errors = collectErrors(page)
     await page.goto('/')
 
-    await expect(page.getByRole('heading', { level: 1 })).toContainText('digital.')
+    await expect(page.getByRole('heading', { level: 1 })).toContainText('Excel')
     await expect(page.locator('canvas.webgl__canvas')).toBeAttached()
 
-    for (const id of ['intro', 'services', 'projects', 'contact']) {
+    for (const id of ['intro', 'services', 'projects', 'pricing', 'contact']) {
       await expect(page.locator(`#${id}`)).toBeAttached()
     }
-    await expect(page.locator('[data-scene]')).toHaveCount(9)
+    await expect(page.locator('[data-scene]')).toHaveCount(7)
     expect(errors, errors.join('\n')).toEqual([])
   })
 
-  test('contact modal opens, traps Escape and closes', async ({ page, isMobile }) => {
+  test('contact modal opens, traps Escape and closes', async ({ page }) => {
     await page.goto('/')
     // wait for the preloader to finish
     await expect(page.locator('.preloader')).toHaveCount(0, { timeout: 8000 })
 
-    const trigger = isMobile
-      ? page.getByRole('button', { name: 'Yozish' })
-      : page.getByRole('button', { name: /Loyihani muhokama qilish/ }).first()
+    const trigger = page.getByRole('button', { name: 'Bepul audit olish' }).first()
     await trigger.scrollIntoViewIfNeeded()
     await trigger.click()
 

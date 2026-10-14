@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import gsap from 'gsap'
+import { telegram } from '~/data/site'
 
 const t = useSite()
 
@@ -44,7 +45,6 @@ onBeforeUnmount(() => ctx?.revert())
   <section ref="root" class="hero" data-scene="hero" aria-labelledby="hero-title">
     <div class="hero__top container">
       <span class="eyebrow" data-hero-fade>{{ t.site.role }} — {{ t.site.city }}</span>
-      <span class="mono dim hero__index" data-hero-fade>{{ t.ui.hero.index }}</span>
     </div>
 
     <h1 id="hero-title" class="hero__title display container">
@@ -54,19 +54,14 @@ onBeforeUnmount(() => ctx?.revert())
     </h1>
 
     <div class="hero__bottom container">
-      <div class="hero__scroll mono" data-hero-fade>
-        <span class="hero__scroll-dot" />
-        {{ t.ui.hero.scroll }}
-      </div>
-      <ul class="hero__awards" data-hero-fade>
-        <li v-for="a in t.stats.awards.slice(0, 3)" :key="a.name">
-          <span class="mono dim">{{ a.name }}</span>
-          <strong>{{ a.count }}+</strong>
-        </li>
-      </ul>
       <div class="hero__cta" data-hero-fade>
-        <p class="dim">{{ t.site.heroLead }}</p>
-        <button class="btn btn--solid" type="button" @click="show">{{ t.ui.hero.cta }} <span aria-hidden="true">→</span></button>
+        <p>{{ t.site.heroLead }}</p>
+        <div class="hero__actions">
+          <button class="btn btn--solid" type="button" data-cta="hero" @click="show">{{ t.ui.cta.label }} <span aria-hidden="true">→</span></button>
+          <a class="hero__tg" :href="telegram" target="_blank" rel="noopener" data-cta="telegram">
+            {{ t.ui.cta.telegram }} <span aria-hidden="true">↗</span>
+          </a>
+        </div>
       </div>
     </div>
   </section>
@@ -81,15 +76,12 @@ onBeforeUnmount(() => ctx?.revert())
   padding-top: 110px;
   padding-bottom: 36px;
 }
-.hero__top {
-  display: flex;
-  justify-content: space-between;
-}
 .hero__title {
   align-self: center;
-  font-size: var(--fs-hero);
+  font-size: var(--fs-h1);
   display: flex;
   flex-direction: column;
+  text-wrap: balance;
   will-change: transform;
 }
 .hero__line {
@@ -105,62 +97,41 @@ onBeforeUnmount(() => ctx?.revert())
   color: transparent;
   -webkit-text-stroke: 1.5px var(--fg);
 }
-.hero__line--2 {
-  text-align: right;
-}
 .hero__bottom {
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: 1fr 1fr;
   align-items: end;
   gap: 32px;
-}
-.hero__scroll {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-}
-.hero__scroll-dot {
-  width: 22px;
-  height: 36px;
-  border: 1px solid var(--line-strong);
-  border-radius: 999px;
-  position: relative;
-}
-.hero__scroll-dot::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: 7px;
-  width: 4px;
-  height: 7px;
-  translate: -50% 0;
-  border-radius: 2px;
-  background: var(--accent-ink);
-  animation: scroll-dot 1.8s var(--ease-in-out) infinite;
-}
-@keyframes scroll-dot {
-  0% { transform: translateY(0); opacity: 1; }
-  70% { transform: translateY(14px); opacity: 0; }
-  100% { transform: translateY(0); opacity: 0; }
-}
-.hero__awards {
-  display: flex;
-  gap: 28px;
-}
-.hero__awards li {
-  display: grid;
-  gap: 2px;
-}
-.hero__awards strong {
-  font-family: var(--font-display);
-  font-weight: 400;
-  font-size: 1.6rem;
 }
 .hero__cta {
   justify-self: end;
   display: grid;
   gap: 20px;
-  max-width: 340px;
+  max-width: 440px;
+}
+.hero__cta p {
+  max-width: 44ch;
+  text-wrap: pretty;
+}
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 24px;
+}
+.hero__actions .btn {
+  height: 56px;
+  padding: 0 28px;
+}
+.hero__tg {
+  font-weight: 600;
+  padding-block: 12px;
+  border-bottom: 1px solid var(--line-strong);
+  transition: color 0.3s var(--ease-out), border-color 0.3s var(--ease-out);
+}
+.hero__tg:hover {
+  color: var(--accent-ink);
+  border-color: var(--accent-ink);
 }
 @media (max-width: 900px) {
   .hero__bottom {
@@ -168,12 +139,25 @@ onBeforeUnmount(() => ctx?.revert())
   }
   .hero__cta {
     justify-self: start;
+    order: -1;
   }
   .hero__line--1 {
     padding-left: 8%;
   }
-  .hero__index {
-    display: none;
+}
+@media (max-width: 560px) {
+  .hero__line--1 {
+    padding-left: 0;
+  }
+  .hero__actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .hero__tg {
+    text-align: center;
+    border-bottom: 0;
+    min-height: 44px;
   }
 }
 </style>

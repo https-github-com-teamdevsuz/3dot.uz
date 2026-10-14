@@ -82,3 +82,21 @@ The terms were sanity-checked against local catalogue rubrics: yellowpages.uz ha
 - **Error pages.** `404.html` and `200.html` keep only the global head (no `noindex`, no lang). Low impact, because they are not linked and not in the sitemap.
 - **FAQ JSON-LD.** `FAQPage` was skipped. Google limits FAQ rich results to authoritative gov/health sites; Yandex still reads it. Add it if Yandex snippets matter.
 - **Bundle size.** All three `seo.*.ts` files are bundled (about 1 KB gz). Lazy-load them like `site.*.ts` if they grow.
+
+## CRO update
+
+Feature `2026-10-cro-analysis`, tasks S1–S2. Home meta now follows the new offer: one system instead of Excel, CRM/ERP for Uzbekistan, and a free process audit. Sitemap and robots are unchanged.
+
+| Locale | Title (chars) | Description (chars) | `catalogName` |
+|---|---|---|---|
+| uz | Bepul audit: CRM, ERP va raqamlashtirish Toshkentda \| 3dot (58) | Excel o‘rniga yagona tizim: … bepul audit qilamiz va reja beramiz. (157) | CRM, ERP va avtomatlashtirish xizmatlari |
+| ru | CRM и ERP, цифровизация бизнеса: бесплатный аудит \| 3dot (56) | Единая система вместо Excel: … предложим план внедрения. (156) | Услуги: CRM, ERP и автоматизация |
+| en | CRM & ERP, digitalization in Uzbekistan: free audit \| 3dot (58) | One system instead of Excel: … a clear rollout plan. (155) | CRM, ERP and automation services |
+
+**Keywords added:** uz "biznes jarayonlari auditi", "Excel o‘rniga CRM", "ERP tizimi O‘zbekiston"; ru "аудит бизнес-процессов", "CRM вместо Excel"; en "business process audit", "replace Excel with CRM". The web/site-building terms were dropped, since the offer is now CRM/ERP-led.
+
+**JSON-LD:** `OfferCatalog.name` now reads `s.home.catalogName` instead of `servicesTitle`, because the visible services title has become a question.
+
+**Tests:** every title contains both the old e2e words (`raqamlashtirish` / `цифровизация` / `digitalization`) and the R7 words (`CRM` plus `audit` / `аудит`). The current `TITLE` regex and the updated R7 regex both pass.
+
+**Open:** after linguist and frontend land their changes, regenerate and check the home H1 against the title keywords (the H1 now contains "Excel").

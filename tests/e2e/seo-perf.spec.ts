@@ -74,7 +74,7 @@ test('no Google Fonts requests; Unbounded loads', async ({ page }) => {
 })
 
 test('ru HTML modulepreloads exactly the ru copy chunk; uz preloads none of it', async ({ request }) => {
-  const MARK = 'Вместо бумаги, Excel' // from site.ru.ts heroLead
+  const MARK = 'Бесплатно разберём ваши процессы' // from site.ru.ts heroLead
   const preloads = async (path: string) =>
     ((await (await request.get(path)).text()).match(/<link[^>]+rel="modulepreload"[^>]*>/g) ?? []).map((l) => l.match(/href="([^"]+)"/)![1])
   const uz = await preloads('/')

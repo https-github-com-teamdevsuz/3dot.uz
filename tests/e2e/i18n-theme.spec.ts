@@ -3,9 +3,9 @@ import { expect, test, type Page } from '@playwright/test'
 const L = { uz: '', ru: '/ru', en: '/en' } as const
 type Loc = keyof typeof L
 const OG = { uz: 'uz_UZ', ru: 'ru_RU', en: 'en_US' }
-const TITLE = { uz: /raqamlashtirish/, ru: /цифровизация/, en: /digitalization/ }
+const TITLE = { uz: /Bepul audit/, ru: /бесплатный аудит/, en: /free audit/ }
 const SITE = 'https://3dot.uz'
-const UZ_ONLY = ['Loyihani muhokama qilish', 'Ismingiz', 'Sahifa topilmadi', 'pastga', 'raqamlashtiramiz']
+const UZ_ONLY = ['Bepul audit', 'Telegramda yozish', 'Ismingiz', 'Sahifa topilmadi', 'raqamlashtiramiz']
 
 const theme = (p: Page) => p.evaluate(() => document.documentElement.dataset.theme)
 const settle = (p: Page) => expect(p.locator('.preloader')).toHaveCount(0, { timeout: 8000 })
@@ -58,7 +58,7 @@ for (const loc of ['ru', 'en'] as const) {
     await page.goto(L[loc])
     const text = await page.evaluate(() => document.body.textContent || '')
     for (const p of UZ_ONLY) expect(text, p).not.toContain(p)
-    expect(text).toMatch(loc === 'ru' ? /Обсудить проект/ : /Discuss/i)
+    expect(text).toMatch(loc === 'ru' ? /Бесплатный аудит/ : /free audit/i)
   })
 }
 

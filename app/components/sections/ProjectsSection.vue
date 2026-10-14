@@ -73,6 +73,7 @@ onBeforeUnmount(() => {
         >
           <div class="project-card__media">
             <ProjectCover :palette="p.palette" :seed="i + 1" :title="p.title" />
+            <span v-if="p.nda" class="badge mono">{{ t.ui.project.nda }}</span>
           </div>
           <div class="project-card__meta">
             <span class="mono dim">{{ i + 1 }}—{{ projects.length }}</span>
@@ -85,8 +86,7 @@ onBeforeUnmount(() => {
         </NuxtLink>
 
         <div class="projects__all">
-          <span class="display">{{ t.stats.numbers[0]?.value }}{{ t.stats.numbers[0]?.suffix }}</span>
-          <p class="dim">{{ t.stats.numbers[0]?.label.toLowerCase() }}</p>
+          <SectionCta variant="card" :text="t.ui.sectionCta.projects" />
         </div>
       </div>
     </div>
@@ -109,7 +109,8 @@ onBeforeUnmount(() => {
 .projects__head {
   display: flex;
   align-items: baseline;
-  gap: 32px;
+  flex-wrap: wrap;
+  gap: 8px 32px;
   margin-bottom: 48px;
 }
 .projects__head .h2 {
@@ -134,6 +135,7 @@ onBeforeUnmount(() => {
   width: clamp(320px, 38vw, 620px);
 }
 .project-card__media {
+  position: relative;
   aspect-ratio: 4 / 3;
   border-radius: var(--radius);
   overflow: hidden;
@@ -171,9 +173,6 @@ onBeforeUnmount(() => {
   width: clamp(260px, 26vw, 420px);
   padding-left: 48px;
   border-left: 1px solid var(--line);
-}
-.projects__all .display {
-  font-size: clamp(4rem, 8vw, 8rem);
 }
 .projects__progress {
   margin-top: auto;

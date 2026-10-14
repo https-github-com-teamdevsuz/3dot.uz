@@ -32,7 +32,7 @@ Run `/sdlc <feature description>` in Claude Code. The orchestrator delegates eac
 
 | Phase | Agent → model |
 |---|---|
-| 01 requirements | product-analyst → sonnet |
+| 01 requirements | business-analyst → opus (strategy, runs first) → product-analyst → sonnet |
 | 02 design | solution-architect → opus ∥ ui-ux-designer → sonnet |
 | 03 implementation | webgl-engineer → opus ∥ frontend-developer → sonnet ∥ linguist → opus ∥ seo-specialist → opus ∥ performance-engineer → opus |
 | 04 review | code-reviewer → opus |

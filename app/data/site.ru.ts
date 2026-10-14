@@ -10,12 +10,6 @@ const plural = (n: number, one: string, few: string, many: string) => {
 }
 
 export default {
-  meta: {
-    title: '3dot — цифровизация и IT-решения',
-    description:
-      'Переводим в цифру процессы бизнеса и госорганов: CRM, ERP, автоматизация, веб-приложения и сайты.',
-    ogLocale: 'ru_RU'
-  },
   site: {
     tagline: ['digital.', 'systems.', 'growth'],
     role: 'цифровые решения',
@@ -145,7 +139,7 @@ export default {
     },
     modal: {
       close: 'Закрыть',
-      title: 'Привет! Давайте обсудим ваш новый проект — и сделаем его лучшим',
+      title: 'Здравствуйте! Давайте обсудим ваш новый проект',
       name: 'Ваше имя',
       contact: 'Телефон, e-mail или @telegram',
       budget: 'Бюджет',
@@ -180,7 +174,7 @@ export default {
       title: 'Этапы работы',
       text: 'Каждый этап заканчивается конкретным результатом — вы всегда знаете, на какой стадии проект.'
     },
-    faq: { pricingEyebrow: 'цены', pricingTitle: 'Стоимость разработки сайта', eyebrow: 'частые вопросы' },
+    faq: { pricingEyebrow: 'цены', pricingTitle: 'Сколько стоит проект?', eyebrow: 'частые вопросы' },
     contact: { eyebrow: 'давайте знакомиться', title: 'Обсудим проект?', button: 'Написать', cursor: 'Написать' },
     project: {
       back: '← все проекты',

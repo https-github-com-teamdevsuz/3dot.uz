@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { brand } from '~/data/site'
-
 // remount per project so split-text reveals run again
 definePageMeta({ key: (r) => r.fullPath })
 
@@ -15,13 +13,6 @@ const next = computed(() => projects.value[(index.value + 1) % projects.value.le
 if (!project.value) {
   throw createError({ statusCode: 404, statusMessage: t.value.ui.error.projectNotFound, fatal: true })
 }
-
-useSeoMeta({
-  title: () => `${project.value?.title} — ${brand}`,
-  description: () => project.value?.summary,
-  ogTitle: () => `${project.value?.title} — ${brand}`,
-  ogDescription: () => project.value?.summary
-})
 
 const root = ref<HTMLElement | null>(null)
 useReveal(root)

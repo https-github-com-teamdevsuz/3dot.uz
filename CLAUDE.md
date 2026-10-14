@@ -34,7 +34,7 @@ Run `/sdlc <feature description>` in Claude Code. The orchestrator delegates eac
 |---|---|
 | 01 requirements | product-analyst → sonnet |
 | 02 design | solution-architect → opus ∥ ui-ux-designer → sonnet |
-| 03 implementation | webgl-engineer → opus ∥ frontend-developer → sonnet ∥ linguist → opus |
+| 03 implementation | webgl-engineer → opus ∥ frontend-developer → sonnet ∥ linguist → opus ∥ seo-specialist → opus ∥ performance-engineer → opus |
 | 04 review | code-reviewer → opus |
 | 05 testing | qa-engineer → sonnet ∥ performance-auditor → sonnet |
 | 06 release | devops-engineer → haiku |

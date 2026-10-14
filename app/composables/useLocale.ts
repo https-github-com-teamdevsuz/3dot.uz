@@ -1,4 +1,4 @@
-import { DEFAULT_LOCALE, LOCALES, SITE_URL, projectBase, statsBase } from '~/data/site'
+import { DEFAULT_LOCALE, projectBase, statsBase } from '~/data/site'
 import type { Locale, Project, SiteCopy } from '~/data/site'
 import uz from '~/data/site.uz'
 
@@ -16,8 +16,8 @@ type Site = Omit<SiteCopy, 'projects' | 'stats'> & {
 const PREFIX_RE = /^\/(ru|en)(?=\/|$)/
 
 export const localeFromPath = (path: string): Locale => (PREFIX_RE.exec(path)?.[1] as Locale | undefined) ?? DEFAULT_LOCALE
-const stripLocale = (path: string) => path.replace(PREFIX_RE, '') || '/'
-const prefixed = (l: Locale, path: string) => (l === DEFAULT_LOCALE ? path : `/${l}${path === '/' ? '' : path}`)
+export const stripLocale = (path: string) => path.replace(PREFIX_RE, '') || '/'
+export const prefixed = (l: Locale, path: string) => (l === DEFAULT_LOCALE ? path : `/${l}${path === '/' ? '' : path}`)
 
 // Immutable merged copy per locale. Module-level is safe across prerender requests:
 // the active locale is always read from the route, never from this state.
@@ -73,21 +73,4 @@ export const useLocalePath = () => {
 export const useSwitchLocalePath = () => {
   const route = useRoute()
   return (l: Locale) => prefixed(l, stripLocale(route.path)) + route.hash
-}
-
-export const useLocaleHead = () => {
-  const route = useRoute()
-  const locale = useLocale()
-  const t = useSite()
-  const base = computed(() => stripLocale(route.path))
-  const url = (l: Locale) => (SITE_URL + prefixed(l, base.value)).replace(/(.)\/$/, '$1')
-  useHead(() => ({
-    htmlAttrs: { lang: locale.value },
-    link: [
-      { rel: 'canonical', href: url(locale.value) },
-      ...LOCALES.map((l) => ({ rel: 'alternate' as const, hreflang: l, href: url(l) })),
-      { rel: 'alternate', hreflang: 'x-default', href: url(DEFAULT_LOCALE) }
-    ],
-    meta: [{ property: 'og:locale', content: t.value.meta.ogLocale }]
-  }))
 }

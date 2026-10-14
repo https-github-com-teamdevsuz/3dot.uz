@@ -50,7 +50,15 @@
     },
     "linguist": {
       "model": "opus",
-      "why": "Native-quality ru/en copy needs the strongest language model"
+      "why": "Native-quality uz/ru/en copy needs the strongest language model"
+    },
+    "seo-specialist": {
+      "model": "opus",
+      "why": "Keyword strategy and structured data across three locales for Google and Yandex"
+    },
+    "performance-engineer": {
+      "model": "opus",
+      "why": "Hands-on optimisation across build, fonts and runtime needs the strongest model"
     }
   },
   "phases": [
@@ -85,7 +93,9 @@
       "agents": [
         "webgl-engineer",
         "frontend-developer",
-        "linguist"
+        "linguist",
+        "seo-specialist",
+        "performance-engineer"
       ],
       "parallel": true,
       "outputs": [
@@ -165,8 +175,21 @@
       "docs/**"
     ],
     "linguist": [
+      "app/data/site.uz.ts",
       "app/data/site.ru.ts",
       "app/data/site.en.ts"
+    ],
+    "seo-specialist": [
+      "app/data/seo.*.ts",
+      "app/composables/useSeo.ts",
+      "public/robots.txt",
+      "public/sitemap.xml",
+      "head/useSeoMeta calls in app/app.vue and app/pages/**"
+    ],
+    "performance-engineer": [
+      "nuxt.config.ts (vite/build/app.head/nitro perf sections)",
+      "public/fonts/**",
+      "app/assets/css/fonts.css"
     ]
   },
   "budgets": {

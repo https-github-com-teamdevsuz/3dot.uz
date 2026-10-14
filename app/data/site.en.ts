@@ -2,12 +2,6 @@ import type { SiteCopy } from './site'
 
 // English (US) — edited by the linguist from site.uz.ts (glossary: docs/sdlc/2026-10-i18n-theme/10-localization.md).
 export default {
-  meta: {
-    title: '3dot — digitalization and IT solutions',
-    description:
-      'We digitize how businesses and government agencies work: CRM, ERP, automation, web apps and websites.',
-    ogLocale: 'en_US'
-  },
   site: {
     tagline: ['digital.', 'systems.', 'growth'],
     role: 'digital solutions',
@@ -137,7 +131,7 @@ export default {
     },
     modal: {
       close: 'Close',
-      title: 'Hi! Let’s talk about your next project — and make it your best yet',
+      title: 'Hello! Let’s talk about your next project',
       name: 'Your name',
       contact: 'Phone, email or @telegram',
       budget: 'Budget',
@@ -172,7 +166,7 @@ export default {
       title: 'How we work',
       text: 'Every stage ends with a concrete deliverable, so you always know where the project stands.'
     },
-    faq: { pricingEyebrow: 'pricing', pricingTitle: 'Website development cost', eyebrow: 'frequently asked questions' },
+    faq: { pricingEyebrow: 'pricing', pricingTitle: 'What does a project cost?', eyebrow: 'frequently asked questions' },
     contact: { eyebrow: 'let’s get to know each other', title: 'Got a project in mind?', button: 'Get in touch', cursor: 'Write us' },
     project: {
       back: '← all projects',

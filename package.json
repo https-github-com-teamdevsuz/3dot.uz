@@ -1,6 +1,6 @@
 {
   "name": "example-3d-portfolio",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "description": "Liquid-chrome 3D portfolio built with Nuxt, three.js, GSAP and Lenis",
@@ -8,6 +8,7 @@
     "dev": "nuxt dev",
     "build": "nuxt build",
     "generate": "nuxt generate",
+    "postgenerate": "node scripts/sitemap.mjs",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "typecheck": "nuxt typecheck",

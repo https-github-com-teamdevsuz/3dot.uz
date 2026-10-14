@@ -65,5 +65,6 @@ onMounted(() => {
 .preloader__count {
   font-size: clamp(2.5rem, 6vw, 5rem);
   color: var(--accent-ink);
+  font-variant-numeric: tabular-nums;
 }
 </style>

@@ -67,20 +67,21 @@ onBeforeUnmount(() => {
   left: 0;
   border-radius: 50%;
   translate: -50% -50%;
-  mix-blend-mode: difference;
 }
 .cursor__dot {
   width: 6px;
   height: 6px;
-  background: #fff;
+  background: var(--fg);
+  box-shadow: 0 0 0 1px var(--bg);
 }
 .cursor__ring {
   display: grid;
   place-items: center;
   width: 36px;
   height: 36px;
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  transition: width 0.45s var(--ease-out), height 0.45s var(--ease-out), background-color 0.45s;
+  border: 1px solid var(--fg);
+  box-shadow: 0 0 0 1px rgb(var(--bg-rgb) / 0.5);
+  transition: width 0.45s var(--ease-out), height 0.45s var(--ease-out), background-color 0.45s, border-color 0.45s;
 }
 .cursor__ring.is-hover {
   width: 64px;
@@ -89,12 +90,11 @@ onBeforeUnmount(() => {
 .cursor__ring.has-label {
   width: 110px;
   height: 110px;
-  border-color: var(--accent);
-  background: var(--accent);
-  mix-blend-mode: normal;
+  border-color: var(--fg);
+  background: var(--fg);
 }
 .cursor__label {
-  color: var(--on-accent);
+  color: var(--bg);
   opacity: 0;
   transition: opacity 0.3s;
 }

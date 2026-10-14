@@ -7,7 +7,7 @@
 export const LOCALES = ['uz', 'ru', 'en'] as const
 export type Locale = (typeof LOCALES)[number]
 export const DEFAULT_LOCALE: Locale = 'uz'
-export const SITE_URL = 'https://3dot.uz' // TODO: confirm production origin
+export const SITE_URL = 'https://3dot.uz'
 
 export const brand = '3dot'
 export const email = 'hello@3dot.uz' // TODO: real mailbox

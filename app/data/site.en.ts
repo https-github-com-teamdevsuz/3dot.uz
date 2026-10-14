@@ -1,20 +1,20 @@
 import type { SiteCopy } from './site'
 
-// DRAFT translation (English) — needs native-speaker review before launch.
+// English (US) — edited by the linguist from site.uz.ts (glossary: docs/sdlc/2026-10-i18n-theme/10-localization.md).
 export default {
   meta: {
     title: '3dot — digitalization and IT solutions',
     description:
-      'We digitalize business and government processes: CRM, ERP, automation, web apps and websites.',
+      'We digitize how businesses and government agencies work: CRM, ERP, automation, web apps and websites.',
     ogLocale: 'en_US'
   },
   site: {
     tagline: ['digital.', 'systems.', 'growth'],
     role: 'digital solutions',
     city: 'Tashkent',
-    heroLead: 'One system instead of paper, Excel and scattered tools. CRM, ERP and process automation.',
+    heroLead: 'One system instead of paper, spreadsheets and scattered apps. CRM, ERP and process automation.',
     intro:
-      'We digitalize the processes of businesses and government bodies: from paper and Excel sheets to orderly, automated systems. Every solution is built around your own workflows.',
+      'We digitize how businesses and government agencies work: from paper and Excel sheets to orderly, automated systems. Every solution is built around the way you actually work.',
     nav: [
       { label: 'Company', hash: '#intro' },
       { label: 'Projects', hash: '#projects' },
@@ -24,106 +24,106 @@ export default {
   },
   servicesTitle: 'Digital solutions',
   services: [
-    { title: 'CRM systems', sub: 'Clients / Sales / Funnel' },
-    { title: 'ERP and warehouse', sub: 'Production / Warehouse / Finance' },
+    { title: 'CRM systems', sub: 'Customers / Sales / Pipeline' },
+    { title: 'ERP and inventory', sub: 'Production / Inventory / Finance' },
     { title: 'Automation', sub: 'Business processes / Bots' },
-    { title: 'Electronic documents', sub: 'Document flow / Execution control' },
-    { title: 'Web applications', sub: 'Portals / Dashboards / SaaS' },
-    { title: 'Websites', sub: 'Corporate / Landing / 3D' },
-    { title: 'E-commerce', sub: 'Online stores / Payment systems' },
+    { title: 'Document management', sub: 'E-documents / Assignment tracking' },
+    { title: 'Web applications', sub: 'Client portals / Intranets / SaaS' },
+    { title: 'Websites', sub: 'Corporate / Landing pages / 3D' },
+    { title: 'E-commerce', sub: 'Online stores / Payments' },
     { title: 'Integrations', sub: '1C / API / Payme / Click' },
     { title: 'Mobile apps', sub: 'iOS / Android' },
     { title: 'Analytics and BI', sub: 'Dashboards / Reports' },
     { title: 'SEO and SMM', sub: 'Traffic / Content / Ads' },
-    { title: 'Support', sub: 'Monitoring / SLA / Growth' }
+    { title: 'Support', sub: 'Monitoring / SLA / Enhancements' }
   ],
   stats: {
-    headline: 'Experience delivering complex systems',
+    headline: 'Proven at rolling out complex systems',
     caption: 'business processes automated',
     awards: ['Public sector', 'Retail', 'Manufacturing', 'Logistics'],
-    numbers: ['Systems delivered', 'Years on the market']
+    numbers: ['Systems delivered', 'Years in business']
   },
   serviceTabs: [
-    { title: 'Digitalization', text: 'We study your processes and turn them into a system', items: ['Audit', 'CRM / ERP', 'Document flow', 'Bots'] },
-    { title: 'Development', text: 'Web, mobile and backend — in one team', items: ['Nuxt / Vue', 'Node.js / Laravel', 'Flutter', 'PostgreSQL'] },
-    { title: 'Integration', text: 'We connect your existing software to each other', items: ['1C', 'Payme / Click', 'Telegram', 'API'] },
-    { title: 'Marketing', text: 'The system is ready — now you need a flow of customers', items: ['SEO', 'SMM', 'Google Ads', 'Yandex Direct'] },
-    { title: 'Support', text: 'We stay by your side after the release', items: ['Monitoring', 'SLA', 'Training', 'Growth'] }
+    { title: 'Digitalization', text: 'We map your processes and turn them into a system', items: ['Audit', 'CRM / ERP', 'Document management', 'Bots'] },
+    { title: 'Development', text: 'Web, mobile and backend — one team', items: ['Nuxt / Vue', 'Node.js / Laravel', 'Flutter', 'PostgreSQL'] },
+    { title: 'Integration', text: 'We connect the software you already use', items: ['1C', 'Payme / Click', 'Telegram', 'API'] },
+    { title: 'Marketing', text: 'The system is live — now bring in the customers', items: ['SEO', 'SMM', 'Google Ads', 'Yandex Direct'] },
+    { title: 'Support', text: 'We stay with you after launch', items: ['Monitoring', 'SLA', 'Training', 'Enhancements'] }
   ],
   stack: ['Nuxt / Vue', 'Node.js', 'Laravel', 'PostgreSQL', '1C integration', 'Telegram API', 'Docker / DevOps', 'three.js'],
   process: [
-    { title: 'Audit', text: 'We study your processes and find where time and money are being lost' },
-    { title: 'Design', text: 'Technical specification, system architecture and an interface prototype' },
-    { title: 'Development', text: 'We build in stages and show you the result every 2 weeks' },
-    { title: 'Rollout', text: 'Data migration, integration with existing software, testing' },
-    { title: 'Training', text: 'We train your staff and prepare user guides' },
-    { title: 'Support', text: 'Monitoring, bug fixing and further development of the system' }
+    { title: 'Audit', text: 'We study your processes and find where time and money leak' },
+    { title: 'Design', text: 'Technical specification, system architecture and a UI prototype' },
+    { title: 'Development', text: 'We build in stages and demo progress every two weeks' },
+    { title: 'Rollout', text: 'Data migration, integration with your existing software, testing' },
+    { title: 'Training', text: 'We train your team and write the user guides' },
+    { title: 'Support', text: 'Monitoring, bug fixes and ongoing improvements' }
   ],
   pricing: [
     { label: 'Process audit and consultation', value: 'free' },
-    { label: 'Project cost', value: 'custom estimate' }
+    { label: 'Project cost', value: 'custom quote' }
   ],
   faq: [
     {
-      q: 'Everything we have is in Excel. Where do we start?',
-      a: 'With a free audit. We study your processes and show what to automate first for the biggest payoff.'
+      q: 'We run everything in Excel. Where do we start?',
+      a: 'With a free audit. We study your processes and show you what to automate first for the biggest payoff.'
     },
     {
-      q: 'Is it better to buy ready-made software or build a custom one?',
-      a: 'We offer both. If a ready-made system (a CRM, for example) is enough, we configure it; if your processes are unique, we build a custom solution.'
+      q: 'Off-the-shelf or custom-built — which is better?',
+      a: 'We do both. If an off-the-shelf system (a CRM, say) covers your needs, we set it up. If your processes are unique, we build one around them.'
     },
     {
-      q: 'Do you work with our existing 1C and other software?',
-      a: 'Yes. We integrate 1C, payment systems (Payme, Click), Telegram and other services, so nobody has to enter the same data twice.'
+      q: 'Will it work with our 1C and other software?',
+      a: 'Yes. We integrate 1C, payment systems (Payme, Click), Telegram and other services, so no one has to enter the same data twice.'
     },
     {
       q: 'Who supports the system after launch?',
-      a: 'We do. We train your staff, monitor the system and keep developing it under a monthly support agreement.'
+      a: 'We do. We train your team, monitor the system and keep improving it under a monthly support contract.'
     }
   ],
   budgets: ['up to $3k', '$3–10k', '$10–30k', '$30–100k', '$100k+'],
   projects: {
     'ijro-pro': {
-      summary: 'Execution control system for a government agency',
-      tags: ['Public sector', 'Document flow'],
+      summary: 'Assignment tracking system for a government agency',
+      tags: ['Public sector', 'Document management'],
       awards: ['−70% paper', '3 days → 1 day'],
       description:
-        'Assigning tasks, tracking deadlines and collecting execution reports automatically. Managers see the status of every department on a single dashboard and get a Telegram alert when a deadline is missed.'
+        'Issue assignments, track deadlines and collect progress reports automatically. Executives see every department’s status on a single dashboard and get a Telegram alert the moment a deadline slips.'
     },
     'savdo-360': {
       summary: 'CRM and loyalty program for a retail chain',
       tags: ['CRM', 'Retail'],
       awards: ['+24% repeat purchases'],
       description:
-        'Customer base, bonus cards, SMS and Telegram notifications, and sales analytics by branch. Real-time integration with cash registers and 1C.'
+        'Customer database, bonus cards, SMS and Telegram notifications, and sales analytics by store. Real-time integration with POS terminals and 1C.'
     },
     'zavod-erp': {
-      summary: 'ERP for a manufacturing company',
+      summary: 'ERP for a manufacturer',
       tags: ['ERP', 'Manufacturing'],
-      awards: ['Warehouse 100% digital'],
+      awards: ['100% digital warehouse'],
       description:
-        'From raw material intake to finished goods dispatch: warehouse, production plans, cost calculation and daily reports for management.'
+        'From raw-material intake to finished-goods shipping: inventory, production planning, cost accounting and daily reports for management.'
     },
     'yuk-track': {
-      summary: 'Cargo tracking platform for a logistics company',
+      summary: 'Shipment tracking platform for a logistics company',
       tags: ['Logistics', 'Web app'],
-      awards: ['Customer calls −60%'],
+      awards: ['−60% customer calls'],
       description:
-        'A mobile app for drivers, a dispatcher panel and a portal where customers track their cargo online. GPS data and documents in one place.'
+        'A mobile app for drivers, a dispatcher console and a portal where customers track their shipments online. GPS data and paperwork in one place.'
     },
     'shifo-navbat': {
-      summary: 'Online queue and electronic records for a clinic network',
+      summary: 'Online booking and e-health records for a clinic chain',
       tags: ['Healthcare', 'Automation'],
-      awards: ['Waiting time −40%'],
+      awards: ['−40% waiting time'],
       description:
-        'Online doctor appointments, reminders, electronic patient records and clinic load analytics. Patients can also book through a Telegram bot.'
+        'Online appointments, reminders, electronic patient records and clinic workload analytics. Patients can also book through a Telegram bot.'
     },
     'bozor-hub': {
-      summary: 'B2B online platform for wholesale trade',
+      summary: 'B2B ordering platform for wholesale trade',
       tags: ['E-commerce', 'Integration'],
       awards: ['Orders 24/7'],
       description:
-        'A personal account for dealers, individual prices, stock levels and orders synced with 1C. Managers talk to customers instead of typing data by hand.'
+        'A dealer portal with custom pricing, stock levels and orders synced with 1C. Sales managers spend their time on customers, not on data entry.'
     }
   },
   ui: {
@@ -137,19 +137,19 @@ export default {
     },
     modal: {
       close: 'Close',
-      title: 'Hi! Let’s talk about your next best project',
+      title: 'Hi! Let’s talk about your next project — and make it your best yet',
       name: 'Your name',
-      contact: 'Phone, e-mail or @telegram',
+      contact: 'Phone, email or @telegram',
       budget: 'Budget',
       message: 'Message',
-      consent: 'I agree to the processing of personal data',
+      consent: 'I agree to the processing of my personal data',
       send: 'Send',
       sending: 'Sending…',
       doneTitle: 'Thank you!',
-      doneText: 'We will review your request and get back to you soon.',
+      doneText: 'We’ll review your request and get back to you shortly.',
       telegram: 'Message us on Telegram'
     },
-    footer: { navAria: 'Footer menu' },
+    footer: { navAria: 'Footer navigation' },
     hero: { scroll: 'scroll', index: '(IT solutions ’26)', cta: 'Discuss a project' },
     intro: { eyebrow: 'about the studio' },
     services: { eyebrow: 'services' },
@@ -157,23 +157,23 @@ export default {
     projects: {
       eyebrow: 'selected work',
       title: 'Projects',
-      count: (n: number) => `${n} case studies`,
+      count: (n: number) => `${n} ${n === 1 ? 'case study' : 'case studies'}`,
       cursor: 'View'
     },
     expertise: {
       eyebrow: 'expertise',
-      title: 'An individual approach to every task',
+      title: 'A tailored approach to every task',
       tabsAria: 'Service areas',
-      stackLabel: 'development tools',
+      stackLabel: 'our stack',
       clientsAria: 'Clients'
     },
     process: {
       eyebrow: 'process',
       title: 'How we work',
-      text: 'Every stage ends with a concrete result, so you always know where the project stands.'
+      text: 'Every stage ends with a concrete deliverable, so you always know where the project stands.'
     },
     faq: { pricingEyebrow: 'pricing', pricingTitle: 'Website development cost', eyebrow: 'frequently asked questions' },
-    contact: { eyebrow: 'let’s get acquainted', title: 'Shall we discuss a project?', button: 'Write', cursor: 'Write' },
+    contact: { eyebrow: 'let’s get to know each other', title: 'Got a project in mind?', button: 'Get in touch', cursor: 'Write us' },
     project: {
       back: '← all projects',
       year: 'Year',

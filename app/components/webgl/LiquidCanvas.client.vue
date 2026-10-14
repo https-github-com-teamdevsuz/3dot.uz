@@ -18,8 +18,11 @@ const onVisibility = () => (document.hidden ? scene?.stop() : scene?.start())
 const onScroll = ({ velocity }: { velocity: number }) => scene?.setVelocity(velocity)
 
 onMounted(async () => {
+  // during hydration Nuxt's client-only wrapper mounts a placeholder first and swaps in
+  // the real template on the next tick, so the canvas ref is still null here
+  await nextTick()
   const el = canvas.value
-  if (!el) return
+  if (!el || disposed) return
   try {
     // three.js is code-split: it never blocks first paint
     const { LiquidScene } = await import('~/webgl/LiquidScene')

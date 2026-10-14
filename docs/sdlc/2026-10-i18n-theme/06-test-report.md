@@ -35,3 +35,13 @@ None remaining. Two failures in my first run were test bugs (header auto-hide; m
 None (single full run all green after fix; no retries needed).
 
 QA: PASS
+
+## Follow-up tests
+New `tests/e2e/regressions.spec.ts` (desktop + reduced-motion; mobile skipped, no fine pointer):
+- LiquidCanvas mounts: canvas width > 300 and >= 90% of viewport; a `_nuxt/*.js` response containing `WebGLRenderer` was loaded (prod chunks are hash-named, so `/LiquidScene/` URL matching is impossible). Scene is mounted under reduced motion too, so not skipped there. Pass.
+- Custom cursor (`.cursor__dot`, `.cursor__ring`) visible after mouse move, with non-transparent background/border colour differing from page background, in `data-theme` dark and light. Pass.
+- `i18n-theme.spec.ts`: trailing-slash test now requests `/ru` and `/en` (slash-less, `ru.html`). Pass.
+
+Runs: full suite green except the first draft of the canvas test (fixed, test-side bug); regressions + i18n-theme re-run 74 passed, then regressions 6 passed / 3 mobile skips. No flakiness observed. Caveat: cursor "differs from background" compares computed colours only, not rendered contrast ratio.
+
+QA: PASS

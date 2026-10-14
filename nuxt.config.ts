@@ -68,6 +68,7 @@ export default defineNuxtConfig({
   nitro: {
     prerender: {
       crawlLinks: true,
+      autoSubfolderIndex: false, // /ru -> ru.html: served at the slash-less canonical, no Pages 301
       routes: prefixes.flatMap((x) => [x || '/', ...PROJECT_SLUGS.map((s) => `${x}/projects/${s}`)])
     }
   },

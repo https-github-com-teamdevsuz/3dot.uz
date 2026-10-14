@@ -2,79 +2,172 @@
   "$comment": "Single source of truth for the SDLC pipeline. scripts/validate-agents.mjs checks that every .claude/agents/*.md file pins exactly the model listed here, and scripts/guard-agent-model.mjs blocks any runtime model override.",
   "version": 1,
   "artifactsDir": "docs/sdlc",
-  "allowedModels": ["opus", "sonnet", "haiku"],
+  "allowedModels": [
+    "opus",
+    "sonnet",
+    "haiku"
+  ],
   "agents": {
-    "product-analyst": { "model": "sonnet", "why": "Structured requirement extraction; fast, good at writing user stories" },
-    "solution-architect": { "model": "opus", "why": "Deep trade-off reasoning: rendering pipeline, SSR/CSR split, performance budgets" },
-    "ui-ux-designer": { "model": "sonnet", "why": "Design-system and motion specs; strong at visual/UX writing" },
-    "webgl-engineer": { "model": "opus", "why": "GLSL, three.js internals and math — highest reasoning tier" },
-    "frontend-developer": { "model": "sonnet", "why": "High-volume Vue/Nuxt component work; best speed/quality balance" },
-    "code-reviewer": { "model": "opus", "why": "Catching subtle bugs, leaks and SSR pitfalls needs the strongest model" },
-    "qa-engineer": { "model": "sonnet", "why": "Writing and running Playwright tests" },
-    "performance-auditor": { "model": "sonnet", "why": "Bundle, FPS and Lighthouse analysis" },
-    "devops-engineer": { "model": "haiku", "why": "Well-scoped CI/CD config edits; cheapest tier is enough" },
-    "tech-writer": { "model": "haiku", "why": "README / CHANGELOG / handoff summaries" }
+    "product-analyst": {
+      "model": "sonnet",
+      "why": "Structured requirement extraction; fast, good at writing user stories"
+    },
+    "solution-architect": {
+      "model": "opus",
+      "why": "Deep trade-off reasoning: rendering pipeline, SSR/CSR split, performance budgets"
+    },
+    "ui-ux-designer": {
+      "model": "sonnet",
+      "why": "Design-system and motion specs; strong at visual/UX writing"
+    },
+    "webgl-engineer": {
+      "model": "opus",
+      "why": "GLSL, three.js internals and math — highest reasoning tier"
+    },
+    "frontend-developer": {
+      "model": "sonnet",
+      "why": "High-volume Vue/Nuxt component work; best speed/quality balance"
+    },
+    "code-reviewer": {
+      "model": "opus",
+      "why": "Catching subtle bugs, leaks and SSR pitfalls needs the strongest model"
+    },
+    "qa-engineer": {
+      "model": "sonnet",
+      "why": "Writing and running Playwright tests"
+    },
+    "performance-auditor": {
+      "model": "sonnet",
+      "why": "Bundle, FPS and Lighthouse analysis"
+    },
+    "devops-engineer": {
+      "model": "haiku",
+      "why": "Well-scoped CI/CD config edits; cheapest tier is enough"
+    },
+    "tech-writer": {
+      "model": "haiku",
+      "why": "README / CHANGELOG / handoff summaries"
+    },
+    "linguist": {
+      "model": "opus",
+      "why": "Native-quality ru/en copy needs the strongest language model"
+    }
   },
   "phases": [
     {
       "id": "01-requirements",
       "name": "Requirements",
-      "agents": ["product-analyst"],
-      "outputs": ["01-requirements.md"],
+      "agents": [
+        "product-analyst"
+      ],
+      "outputs": [
+        "01-requirements.md"
+      ],
       "gate": "human-approval"
     },
     {
       "id": "02-design",
       "name": "Architecture & Design",
-      "agents": ["solution-architect", "ui-ux-designer"],
+      "agents": [
+        "solution-architect",
+        "ui-ux-designer"
+      ],
       "parallel": true,
-      "outputs": ["02-architecture.md", "03-design-spec.md"],
+      "outputs": [
+        "02-architecture.md",
+        "03-design-spec.md"
+      ],
       "gate": "human-approval"
     },
     {
       "id": "03-implementation",
       "name": "Implementation",
-      "agents": ["webgl-engineer", "frontend-developer"],
+      "agents": [
+        "webgl-engineer",
+        "frontend-developer",
+        "linguist"
+      ],
       "parallel": true,
-      "outputs": ["04-implementation.md"],
+      "outputs": [
+        "04-implementation.md"
+      ],
       "gate": "auto: typecheck passes"
     },
     {
       "id": "04-review",
       "name": "Code review",
-      "agents": ["code-reviewer"],
-      "outputs": ["05-review.md"],
+      "agents": [
+        "code-reviewer"
+      ],
+      "outputs": [
+        "05-review.md"
+      ],
       "gate": "auto: no BLOCKER findings (max 2 fix loops back to 03-implementation)"
     },
     {
       "id": "05-testing",
       "name": "Testing & performance",
-      "agents": ["qa-engineer", "performance-auditor"],
+      "agents": [
+        "qa-engineer",
+        "performance-auditor"
+      ],
       "parallel": true,
-      "outputs": ["06-test-report.md", "07-performance.md"],
+      "outputs": [
+        "06-test-report.md",
+        "07-performance.md"
+      ],
       "gate": "auto: e2e green and performance budget met"
     },
     {
       "id": "06-release",
       "name": "Release",
-      "agents": ["devops-engineer"],
-      "outputs": ["08-release.md"],
+      "agents": [
+        "devops-engineer"
+      ],
+      "outputs": [
+        "08-release.md"
+      ],
       "gate": "human-approval before deploy"
     },
     {
       "id": "07-docs",
       "name": "Documentation & handoff",
-      "agents": ["tech-writer"],
-      "outputs": ["09-handoff.md"],
+      "agents": [
+        "tech-writer"
+      ],
+      "outputs": [
+        "09-handoff.md"
+      ],
       "gate": "none"
     }
   ],
   "ownership": {
-    "webgl-engineer": ["app/webgl/**", "app/components/webgl/**"],
-    "frontend-developer": ["app/**", "!app/webgl/**", "!app/components/webgl/**"],
-    "qa-engineer": ["tests/**", "playwright.config.ts"],
-    "devops-engineer": [".github/**", "nuxt.config.ts (build/nitro sections only)"],
-    "tech-writer": ["README.md", "CHANGELOG.md", "docs/**"]
+    "webgl-engineer": [
+      "app/webgl/**",
+      "app/components/webgl/**"
+    ],
+    "frontend-developer": [
+      "app/**",
+      "!app/webgl/**",
+      "!app/components/webgl/**"
+    ],
+    "qa-engineer": [
+      "tests/**",
+      "playwright.config.ts"
+    ],
+    "devops-engineer": [
+      ".github/**",
+      "nuxt.config.ts (build/nitro sections only)"
+    ],
+    "tech-writer": [
+      "README.md",
+      "CHANGELOG.md",
+      "docs/**"
+    ],
+    "linguist": [
+      "app/data/site.ru.ts",
+      "app/data/site.en.ts"
+    ]
   },
   "budgets": {
     "lcpMs": 2500,

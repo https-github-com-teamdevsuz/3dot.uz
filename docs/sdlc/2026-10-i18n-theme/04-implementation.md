@@ -73,3 +73,23 @@ The cheaper option was chosen: one environment map and a palette cross-fade only
 - `SiteHeader.vue`: `.header__theme` has `position: relative; z-index: 2` (above open mobile menu).
 - `ContactModal.vue`: active chip border uses `--accent-ink`.
 - Minors: `.page-*` transition is opacity-only 0.35s; ThemeToggle clears the previous `theme-anim` timer; cursor label uses `--on-accent`; `ExpertiseSection` loop var renamed `tab`.
+
+## Follow-up fixes
+
+### Cursor invisible in light theme
+Root cause: `CustomCursor.client.vue` hard-coded white (`#fff`, `rgba(255,255,255,.6)`) and used `mix-blend-mode: difference`; on the light page/canvas the blended result was near-invisible (faint 60% ring, mid-grey dot). Fix: removed the blend mode; dot/ring/label-state use `--fg`/`--bg` tokens (label state: `--fg` fill, `--bg` text) so both themes get high contrast. Only file changed: `app/components/ui/CustomCursor.client.vue`.
+
+### Trailing-slash policy
+Decision: slash-less URLs are canonical. `nitro.prerender.autoSubfolderIndex: false` in `nuxt.config.ts` makes routes emit `ru.html`, `en.html`, `ru/projects/x.html`; GitHub Pages serves `/ru` from `ru.html` with no 301. Verified via `npm run generate`: `index.html` and `404.html` still exist; canonical/hreflang/switcher links unchanged (already slash-less). Note: `/ru/` (with slash) now resolves to the `ru/` directory (no index) so would 404 on Pages; nothing links to it.
+
+## Follow-up fix: canvas
+
+**Symptom:** the liquid-chrome blob was missing. `<canvas>` stayed at the default 300x150, `LiquidScene` / three.js was never requested, and there was no console error.
+
+**Root cause:** in `app/components/webgl/LiquidCanvas.client.vue`, `onMounted` read `canvas.value` synchronously and returned silently on `if (!el) return`. During hydration, Nuxt's `createClientOnly` wrapper (`node_modules/nuxt/dist/app/components/client-only.js`) first mounts a placeholder. It only switches `mounted$` to true in its own `onMounted`, so the real template (and the `ref="canvas"`) renders one tick **after** the component's `onMounted` has run. Instrumentation confirmed this: at mount time, `el` was null and `document.querySelectorAll('canvas').length` was 0. No theme or palette code was involved: `LiquidScene`, `SCENE_PALETTES`, `setTheme`, exposure, envMapIntensity and the CSS were all fine once the scene was constructed.
+
+**Fix (LiquidCanvas.client.vue only):** `await nextTick()` before reading the ref, and also bail if the component was unmounted during that tick (`if (!el || disposed) return`). No API changes, no new presets, and draw calls and triangle counts are unchanged.
+
+**Verified** with Playwright (chromium, SwiftShader) on `/` in `data-theme="dark"`, `"light"`, and dark + `prefers-reduced-motion: reduce`. In all three, the canvas was sized 1280x720, `LiquidScene.ts` was requested, the blob was visible in screenshots, and there were no console errors. `npm run typecheck` passes.
+
+**Reviewer note:** a silent `return` on a missing ref hid this bug. If a regression guard is wanted, an e2e assertion should check that the canvas width is not 300 (request to qa-engineer).

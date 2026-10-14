@@ -47,9 +47,9 @@ for (const loc of Object.keys(L) as Loc[]) {
   })
 }
 
-test('US-1 trailing-slash locale routes are served', async ({ request }) => {
-  expect((await request.get('/ru/')).status()).toBe(200)
-  expect((await request.get('/en/')).status()).toBe(200)
+test('US-1 slash-less locale routes (ru.html) are served', async ({ request }) => {
+  expect((await request.get('/ru')).status()).toBe(200)
+  expect((await request.get('/en')).status()).toBe(200)
 })
 
 // US-5

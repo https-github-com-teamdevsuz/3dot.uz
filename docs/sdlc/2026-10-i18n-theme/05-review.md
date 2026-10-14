@@ -67,3 +67,23 @@ Typecheck: `npx nuxt typecheck` exits 0, with the same `vue-router/volar` toolin
 QA notes from loop 1 still apply: measure visible overflow instead of raw `scrollWidth`, and the US-10 canvas contrast sample is still unmeasured.
 
 VERDICT: APPROVED
+
+---
+
+# 05 · Code review, follow-up fixes (loop 3): 2026-10-i18n-theme
+
+> Owner: code-reviewer (opus) · 2026-10-14 · scope: uncommitted diff after 34b073a
+
+| Severity | file:line | Finding | Fix |
+|---|---|---|---|
+| NIT | app/data/site.ts:10 | Trailing space left after removing the TODO. | Deleted (orchestrator). |
+| NIT | app/components/ui/CustomCursor.client.vue:84 | `border-color` not in the `transition` list; border snaps while fill fades. | Added `border-color 0.45s` (orchestrator). |
+| NIT | app/components/ui/CustomCursor.client.vue:83 | In dark theme over lime fills the ring halo is only 50% opacity; still visible. | Optional, left as is. |
+
+## Verified
+1. **LiquidCanvas.client.vue**: `await nextTick()` + `disposed` guard is leak-free for unmount before, during and after the dynamic import; `onBeforeUnmount` cleanup unchanged.
+2. **CustomCursor.client.vue**: dot/ring use `--fg` with `--bg` halo, label state ≈18:1 in both themes; hover logic, GSAP quickTo and listener cleanup untouched; no `mix-blend-mode` left.
+3. **nuxt.config.ts** `autoSubfolderIndex: false`: output has `ru.html`, `en.html`, `index.html`, `200.html`, `404.html`; inline redirect and every `localePath()` caller emit slash-less URLs; `/ru/` 404 acceptable (nothing links to it).
+4. **site.ru.ts / site.en.ts**: `plural()` is pure and SSR-safe with correct 11–14 handling; both satisfy `SiteCopy`; no HTML in strings; header nav / CTA strings unchanged; Russian typography correct.
+
+VERDICT: APPROVE

@@ -1,0 +1,37 @@
+{
+  "name": "example-3d-portfolio",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Liquid-chrome 3D portfolio built with Nuxt, three.js, GSAP and Lenis",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "typecheck": "nuxt typecheck",
+    "test:e2e": "playwright test",
+    "agents:check": "node scripts/validate-agents.mjs",
+    "sdlc:status": "node scripts/sdlc-status.mjs",
+    "ci": "npm run agents:check && npm run typecheck && npm run generate"
+  },
+  "dependencies": {
+    "gsap": "^3.15.0",
+    "lenis": "^1.3.26",
+    "nuxt": "^4.6.1",
+    "three": "^0.186.0",
+    "vue": "^3.5.0",
+    "vue-router": "^4.5.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.64.0",
+    "@types/three": "^0.185.0",
+    "serve": "^14.2.4",
+    "typescript": "^5.9.3",
+    "vue-tsc": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=20.19"
+  }
+}

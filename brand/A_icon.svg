@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120"><defs>
+<radialGradient id="chromeA4" cx="36%" cy="30%" r="78%">
+ <stop offset="0" stop-color="#ffffff"/><stop offset=".16" stop-color="#e9ecf2"/>
+ <stop offset=".42" stop-color="#8a90a0"/><stop offset=".7" stop-color="#1b1d24"/>
+ <stop offset=".88" stop-color="#3a3550"/><stop offset="1" stop-color="#7b5cff"/></radialGradient>
+<radialGradient id="limeA4" cx="36%" cy="30%" r="78%">
+ <stop offset="0" stop-color="#ffffff"/><stop offset=".2" stop-color="#efffc8"/>
+ <stop offset=".5" stop-color="#c8ff5a"/><stop offset=".82" stop-color="#4d6b12"/><stop offset="1" stop-color="#2a3a08"/></radialGradient>
+</defs><rect width="120" height="120" fill="#050505"/><circle cx="60.0" cy="32.400000000000006" r="24.0" fill="url(#limeA4)"/><circle cx="32.400000000000006" cy="81.60000000000001" r="24.0" fill="url(#chromeA4)"/><circle cx="87.6" cy="81.60000000000001" r="24.0" fill="url(#chromeA4)"/></svg>

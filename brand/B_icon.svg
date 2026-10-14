@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120"><defs>
+<radialGradient id="chromeB4" cx="36%" cy="30%" r="78%">
+ <stop offset="0" stop-color="#ffffff"/><stop offset=".16" stop-color="#e9ecf2"/>
+ <stop offset=".42" stop-color="#8a90a0"/><stop offset=".7" stop-color="#1b1d24"/>
+ <stop offset=".88" stop-color="#3a3550"/><stop offset="1" stop-color="#7b5cff"/></radialGradient>
+<radialGradient id="limeB4" cx="36%" cy="30%" r="78%">
+ <stop offset="0" stop-color="#ffffff"/><stop offset=".2" stop-color="#efffc8"/>
+ <stop offset=".5" stop-color="#c8ff5a"/><stop offset=".82" stop-color="#4d6b12"/><stop offset="1" stop-color="#2a3a08"/></radialGradient>
+</defs><rect width="120" height="120" fill="#050505"/><path d="M19.05 71.74 A42.60 10.80 -16 0 1 100.95 48.26" fill="none" stroke="#c8ff5a" stroke-width="3.5" stroke-linecap="round" opacity=".55"/><circle cx="60" cy="60" r="30" fill="url(#chromeB4)"/><path d="M19.05 71.74 A42.60 10.80 -16 0 0 100.95 48.26" fill="none" stroke="#c8ff5a" stroke-width="3.5" stroke-linecap="round"/><circle cx="95.25" cy="56.34" r="6.00" fill="#c8ff5a"/></svg>

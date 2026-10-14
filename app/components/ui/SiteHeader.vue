@@ -1,21 +1,20 @@
 <script setup lang="ts">
-import { site } from '~/data/site'
+import { email } from '~/data/site'
 
 const { show } = useContactModal()
 const route = useRoute()
+const t = useSite()
+const localePath = useLocalePath()
 const nuxtApp = useNuxtApp()
 const menuOpen = ref(false)
 const hidden = ref(false)
 const scrolled = ref(false)
 
-const go = (href: string) => {
+const href = (hash: string) => localePath('/') + hash
+const go = (hash: string) => {
   menuOpen.value = false
-  const hash = href.split('#')[1]
-  if (hash && route.path === '/') {
-    nuxtApp.$scrollTo(`#${hash}`)
-  } else {
-    navigateTo(href)
-  }
+  if (route.path === localePath('/')) nuxtApp.$scrollTo(hash)
+  else navigateTo(href(hash))
 }
 
 let last = 0
@@ -38,24 +37,27 @@ watch(menuOpen, (open) => {
 <template>
   <header class="header" :class="{ 'header--hidden': hidden, 'header--scrolled': scrolled, 'header--open': menuOpen }">
     <div class="header__inner container">
-      <NuxtLink to="/" class="header__logo" aria-label="3dot — bosh sahifa">
+      <NuxtLink :to="localePath('/')" class="header__logo" :aria-label="t.ui.header.logoAria">
         <BrandLogo />
       </NuxtLink>
 
-      <nav class="header__nav" aria-label="Asosiy menyu">
-        <a v-for="item in site.nav" :key="item.href" :href="item.href" class="header__link" @click.prevent="go(item.href)">
+      <nav class="header__nav" :aria-label="t.ui.header.navAria">
+        <a v-for="item in t.site.nav" :key="item.hash" :href="href(item.hash)" class="header__link" @click.prevent="go(item.hash)">
           <span class="header__link-text" :data-text="item.label">{{ item.label }}</span>
         </a>
       </nav>
 
-      <button class="btn header__cta" type="button" @click="show">Loyihani muhokama qilish</button>
+      <LangSwitch class="header__lang" />
+      <ThemeToggle class="header__theme" />
+
+      <button class="btn header__cta" type="button" @click="show">{{ t.ui.header.cta }}</button>
 
       <button
         class="header__burger"
         type="button"
         :aria-expanded="menuOpen"
         aria-controls="mobile-menu"
-        :aria-label="menuOpen ? 'Menyuni yopish' : 'Menyuni ochish'"
+        :aria-label="menuOpen ? t.ui.header.menuClose : t.ui.header.menuOpen"
         @click="menuOpen = !menuOpen"
       >
         <span /><span />
@@ -65,13 +67,14 @@ watch(menuOpen, (open) => {
     <Transition name="menu">
       <div v-if="menuOpen" id="mobile-menu" class="menu">
         <nav class="menu__nav container">
-          <a v-for="(item, i) in site.nav" :key="item.href" :href="item.href" class="menu__link" :style="{ '--i': i }" @click.prevent="go(item.href)">
+          <a v-for="(item, i) in t.site.nav" :key="item.hash" :href="href(item.hash)" class="menu__link" :style="{ '--i': i }" @click.prevent="go(item.hash)">
             <span class="mono dim">0{{ i + 1 }}</span>{{ item.label }}
           </a>
         </nav>
         <div class="menu__footer container">
-          <a :href="`mailto:${site.email}`">{{ site.email }}</a>
-          <button class="btn btn--solid" type="button" @click="menuOpen = false; show()">Loyihani muhokama qilish</button>
+          <LangSwitch pills />
+          <a :href="`mailto:${email}`">{{ email }}</a>
+          <button class="btn btn--solid" type="button" @click="menuOpen = false; show()">{{ t.ui.header.cta }}</button>
         </div>
       </div>
     </Transition>
@@ -89,7 +92,7 @@ watch(menuOpen, (open) => {
   transform: translateY(-110%);
 }
 .header--scrolled:not(.header--open) {
-  background: linear-gradient(to bottom, rgba(5, 5, 5, 0.85), rgba(5, 5, 5, 0));
+  background: linear-gradient(to bottom, var(--header-scrim), rgb(var(--bg-rgb) / 0));
 }
 .header__inner {
   display: flex;
@@ -107,6 +110,18 @@ watch(menuOpen, (open) => {
 .header__nav {
   display: flex;
   gap: 36px;
+  white-space: nowrap;
+}
+.header__cta {
+  white-space: nowrap;
+}
+.header__lang {
+  margin-left: -8px;
+}
+.header__theme {
+  position: relative;
+  z-index: 2;
+  margin-left: -8px;
 }
 .header__link {
   position: relative;
@@ -124,7 +139,7 @@ watch(menuOpen, (open) => {
   position: absolute;
   left: 0;
   top: 100%;
-  color: var(--accent);
+  color: var(--accent-ink);
 }
 .header__link:hover .header__link-text {
   transform: translateY(-100%);
@@ -141,7 +156,7 @@ watch(menuOpen, (open) => {
   width: 46px;
   height: 46px;
   border-radius: 50%;
-  border: 1px solid var(--line);
+  border: 1px solid var(--line-strong);
 }
 .header__burger span {
   position: absolute;
@@ -199,10 +214,28 @@ watch(menuOpen, (open) => {
   clip-path: inset(0 0 100% 0);
 }
 
+@media (max-width: 1180px) {
+  .header__inner {
+    gap: 18px;
+  }
+  .header__nav {
+    gap: 22px;
+  }
+  .header__cta {
+    padding: 0 18px;
+  }
+}
 @media (max-width: 900px) {
   .header__nav,
+  .header__lang,
   .header__cta {
     display: none;
+  }
+  .header__inner {
+    gap: 12px;
+  }
+  .header__theme {
+    margin-left: 0;
   }
   .header__burger {
     display: block;

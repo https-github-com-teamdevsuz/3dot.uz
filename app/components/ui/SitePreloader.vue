@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import gsap from 'gsap'
-import { site } from '~/data/site'
 
+const t = useSite()
 const root = ref<HTMLElement | null>(null)
 const counter = ref(0)
 const done = ref(false)
@@ -32,7 +32,7 @@ onMounted(() => {
       <div class="preloader__brand"><BrandLogo /></div>
     </div>
     <div class="preloader__meta container">
-      <span class="mono dim">{{ site.tagline.join(' ') }}</span>
+      <span class="mono dim">{{ t.site.tagline.join(' ') }}</span>
       <span class="preloader__count display">{{ String(counter).padStart(3, '0') }}</span>
     </div>
   </div>
@@ -64,6 +64,6 @@ onMounted(() => {
 }
 .preloader__count {
   font-size: clamp(2.5rem, 6vw, 5rem);
-  color: var(--accent);
+  color: var(--accent-ink);
 }
 </style>

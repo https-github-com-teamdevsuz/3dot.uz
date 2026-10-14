@@ -2,14 +2,16 @@
 import type { NuxtError } from '#app'
 
 const props = defineProps<{ error: NuxtError }>()
-const handle = () => clearError({ redirect: '/' })
+const t = useSite()
+const localePath = useLocalePath()
+const handle = () => clearError({ redirect: localePath('/') })
 </script>
 
 <template>
   <main class="error container">
-    <span class="mono dim">xato {{ props.error.statusCode }}</span>
-    <h1 class="display">{{ props.error.statusCode === 404 ? 'Sahifa topilmadi' : 'Nimadir xato ketdi' }}</h1>
-    <button class="btn btn--solid" type="button" @click="handle">Bosh sahifaga</button>
+    <span class="mono dim">{{ t.ui.error.code }} {{ props.error.statusCode }}</span>
+    <h1 class="display">{{ props.error.statusCode === 404 ? t.ui.error.notFound : t.ui.error.generic }}</h1>
+    <button class="btn btn--solid" type="button" @click="handle">{{ t.ui.error.home }}</button>
   </main>
 </template>
 

@@ -34,7 +34,7 @@ export function useSceneSections() {
 
   onMounted(() => {
     bind()
-    nuxtApp.hook('page:finish', () => requestAnimationFrame(bind))
+    nuxtApp.hook('page:finish', () => { requestAnimationFrame(bind) })
   })
   onBeforeUnmount(() => triggers.forEach((t) => t.kill()))
 

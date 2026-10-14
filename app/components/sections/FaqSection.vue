@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { faq, pricing } from '~/data/site'
+
+const t = useSite()
 
 const root = ref<HTMLElement | null>(null)
 const open = ref<number | null>(0)
@@ -12,10 +13,10 @@ const toggle = (i: number) => (open.value = open.value === i ? null : i)
   <section ref="root" class="faq section" data-scene="faq">
     <div class="faq__grid container">
       <div class="faq__pricing">
-        <span class="eyebrow" data-reveal>narxlar</span>
-        <h2 class="h2" data-split>Sayt ishlab chiqish narxi</h2>
+        <span class="eyebrow" data-reveal>{{ t.ui.faq.pricingEyebrow }}</span>
+        <h2 class="h2" data-split>{{ t.ui.faq.pricingTitle }}</h2>
         <dl>
-          <div v-for="p in pricing" :key="p.label" class="faq__price" data-reveal>
+          <div v-for="p in t.pricing" :key="p.label" class="faq__price" data-reveal>
             <dt class="dim">{{ p.label }}</dt>
             <dd class="display">{{ p.value }}</dd>
           </div>
@@ -23,8 +24,8 @@ const toggle = (i: number) => (open.value = open.value === i ? null : i)
       </div>
 
       <div class="faq__list">
-        <span class="eyebrow" data-reveal>ko‘p beriladigan savollar</span>
-        <div v-for="(item, i) in faq" :key="item.q" class="faq__item" :class="{ 'is-open': open === i }" data-reveal>
+        <span class="eyebrow" data-reveal>{{ t.ui.faq.eyebrow }}</span>
+        <div v-for="(item, i) in t.faq" :key="item.q" class="faq__item" :class="{ 'is-open': open === i }" data-reveal>
           <h3>
             <button
               :id="`faq-q-${i}`"
@@ -96,7 +97,7 @@ const toggle = (i: number) => (open.value = open.value === i ? null : i)
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  border: 1px solid var(--line);
+  border: 1px solid var(--line-strong);
   transition: background-color 0.4s, transform 0.5s var(--ease-out);
 }
 .faq__icon::before,
@@ -114,8 +115,8 @@ const toggle = (i: number) => (open.value = open.value === i ? null : i)
 }
 .is-open .faq__icon {
   background: var(--accent);
-  color: #000;
-  border-color: var(--accent);
+  color: var(--on-accent);
+  border-color: var(--accent-ink);
 }
 .is-open .faq__icon::after {
   transform: rotate(0deg);

@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import gsap from 'gsap'
-import { site } from '~/data/site'
+import { email, phone, telegram } from '~/data/site'
 
+const t = useSite()
 const root = ref<HTMLElement | null>(null)
 const button = ref<HTMLElement | null>(null)
 const { show } = useContactModal()
@@ -28,19 +29,19 @@ const onLeave = () => {
 <template>
   <section id="contact" ref="root" class="contact section" data-scene="contact">
     <div class="contact__inner container">
-      <span class="eyebrow" data-reveal>keling, tanishamiz</span>
-      <h2 class="contact__title display" data-split>Loyihani muhokama qilamizmi?</h2>
+      <span class="eyebrow" data-reveal>{{ t.ui.contact.eyebrow }}</span>
+      <h2 class="contact__title display" data-split>{{ t.ui.contact.title }}</h2>
 
       <div class="contact__magnet" @pointermove="onMove" @pointerleave="onLeave">
-        <button ref="button" type="button" class="contact__btn" data-cursor="Yozish" @click="show">
-          <span>Yozish</span>
+        <button ref="button" type="button" class="contact__btn" :data-cursor="t.ui.contact.cursor" @click="show">
+          <span>{{ t.ui.contact.button }}</span>
         </button>
       </div>
 
       <div class="contact__links" data-reveal>
-        <a :href="`mailto:${site.email}`">{{ site.email }}</a>
-        <a :href="site.telegram" target="_blank" rel="noopener">Telegram ↗</a>
-        <a :href="`tel:${site.phone.replace(/\s/g, '')}`">{{ site.phone }}</a>
+        <a :href="`mailto:${email}`">{{ email }}</a>
+        <a :href="telegram" target="_blank" rel="noopener">Telegram ↗</a>
+        <a :href="`tel:${phone.replace(/\s/g, '')}`">{{ phone }}</a>
       </div>
     </div>
   </section>
@@ -70,7 +71,7 @@ const onLeave = () => {
   aspect-ratio: 1;
   border-radius: 50%;
   background: var(--accent);
-  color: #000;
+  color: var(--on-accent);
   font-family: var(--font-display);
   font-size: 1.15rem;
   box-shadow: 0 0 80px -10px var(--accent);
@@ -92,7 +93,7 @@ const onLeave = () => {
   transition: border-color 0.3s, color 0.3s;
 }
 .contact__links a:hover {
-  color: var(--accent);
-  border-color: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent-ink);
 }
 </style>

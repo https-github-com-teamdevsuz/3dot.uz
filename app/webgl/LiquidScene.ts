@@ -1,16 +1,25 @@
 import * as THREE from 'three'
 import { simplexNoise3D } from './noise'
-import { DEFAULT_STATE, resolvePreset, type SceneState } from './scenePresets'
+import { DEFAULT_STATE, SCENE_PALETTES, resolvePreset, type SceneState, type SceneTheme } from './scenePresets'
 
 const ACCENT = new THREE.Color('#c8ff5a')
 const VIOLET = new THREE.Color('#7b5cff')
 const WHITE = new THREE.Color('#ffffff')
+
+const STATE_KEYS = Object.keys(DEFAULT_STATE) as (keyof SceneState)[]
+
+/** Palette parsed once into THREE.Colors so the frame loop only lerps. */
+const parsePalette = (theme: SceneTheme) => {
+  const p = SCENE_PALETTES[theme]
+  return { ...p, rimA: new THREE.Color(p.rimA), rimB: new THREE.Color(p.rimB), base: new THREE.Color(p.base), tint: new THREE.Color(p.tint) }
+}
 
 const damp = (current: number, target: number, lambda: number, dt: number) =>
   THREE.MathUtils.lerp(current, target, 1 - Math.exp(-lambda * dt))
 
 export interface LiquidSceneOptions {
   reducedMotion?: boolean
+  theme?: SceneTheme
 }
 
 /**
@@ -25,6 +34,7 @@ export class LiquidScene {
   private blob!: THREE.Mesh<THREE.IcosahedronGeometry, THREE.MeshPhysicalMaterial>
   private satellites: THREE.Mesh[] = []
   private satelliteGroup = new THREE.Group()
+  private satelliteMaterial!: THREE.MeshPhysicalMaterial
   private envTarget: THREE.WebGLRenderTarget | null = null
   private frame = 0
   private running = false
@@ -39,6 +49,15 @@ export class LiquidScene {
   private appear = 0
   private elapsed = 0
   private tmp = new THREE.Vector3()
+
+  // theme cross-fade: 0 = dark, 1 = light
+  private palettes = { dark: parsePalette('dark'), light: parsePalette('light') }
+  private themeMix = 0
+  private themeTarget = 0
+  private rimA = new THREE.Color()
+  private rimB = new THREE.Color()
+  private base = new THREE.Color()
+  private tint = new THREE.Color()
 
   private uniforms = {
     uTime: { value: 0 },
@@ -55,6 +74,7 @@ export class LiquidScene {
   constructor(canvas: HTMLCanvasElement, options: LiquidSceneOptions = {}) {
     this.canvas = canvas
     this.reducedMotion = !!options.reducedMotion
+    this.themeMix = this.themeTarget = options.theme === 'light' ? 1 : 0
 
     this.renderer = new THREE.WebGLRenderer({
       canvas,
@@ -192,14 +212,14 @@ export class LiquidScene {
   }
 
   private buildSatellites() {
-    const material = new THREE.MeshPhysicalMaterial({
+    const material = (this.satelliteMaterial = new THREE.MeshPhysicalMaterial({
       color: WHITE,
       metalness: 1,
       roughness: 0.12,
       iridescence: 0.8,
       iridescenceIOR: 1.3,
       envMapIntensity: 1.1
-    })
+    }))
     const geometry = new THREE.SphereGeometry(1, 48, 48)
     const configs = [
       { radius: 0.16, orbit: 1.85, speed: 0.42, phase: 0, tilt: 0.4 },
@@ -230,6 +250,12 @@ export class LiquidScene {
   /** Scroll velocity from Lenis (px / frame); excites the surface. */
   setVelocity(v: number) {
     this.velocity = THREE.MathUtils.clamp(Math.abs(v) / 40, 0, 1)
+  }
+
+  /** Cross-fade the blob palette (~0.6 s). Instant under reduced motion or when `instant`. */
+  setTheme(theme: SceneTheme, instant = false) {
+    this.themeTarget = theme === 'light' ? 1 : 0
+    if (instant || this.reducedMotion) this.themeMix = this.themeTarget
   }
 
   resize() {
@@ -266,7 +292,7 @@ export class LiquidScene {
     this.blob.geometry.dispose()
     this.blob.material.dispose()
     this.satellites[0]?.geometry.dispose()
-    ;(this.satellites[0]?.material as THREE.Material | undefined)?.dispose()
+    this.satelliteMaterial?.dispose()
     this.envTarget?.dispose()
     this.renderer.dispose()
   }
@@ -287,9 +313,7 @@ export class LiquidScene {
     const c = this.current
     const t = this.target
     const k = 2.4
-    ;(Object.keys(c) as (keyof SceneState)[]).forEach((key) => {
-      c[key] = damp(c[key], t[key], k, dt)
-    })
+    for (const key of STATE_KEYS) c[key] = damp(c[key], t[key], k, dt)
 
     this.pointerSmooth.x = damp(this.pointerSmooth.x, this.pointer.x, 4, dt)
     this.pointerSmooth.y = damp(this.pointerSmooth.y, this.pointer.y, 4, dt)
@@ -315,10 +339,26 @@ export class LiquidScene {
     const local = this.blob.worldToLocal(this.tmp.set(this.pointerSmooth.x * worldW * 0.5, this.pointerSmooth.y * worldH * 0.5, 2))
     if (local.lengthSq() > 1e-6) u.uPointer.value.copy(local)
     u.uPointerForce.value = damp(u.uPointerForce.value, this.reducedMotion ? 0 : 0.6, 2, dt)
-    u.uRim.value = 0.25 + c.tint * 0.9
-    u.uRimColor.value.copy(ACCENT).lerp(VIOLET, 0.5 + 0.5 * Math.sin(this.elapsed * 0.25))
 
-    this.blob.material.color.copy(WHITE).lerp(ACCENT, c.tint * 0.35)
+    // theme palette (damp 5 ≈ 95 % in 0.6 s)
+    this.themeMix = damp(this.themeMix, this.themeTarget, 5, dt)
+    const m = this.themeMix
+    const dark = this.palettes.dark
+    const light = this.palettes.light
+    const lerp = THREE.MathUtils.lerp
+    this.rimA.lerpColors(dark.rimA, light.rimA, m)
+    this.rimB.lerpColors(dark.rimB, light.rimB, m)
+    this.base.lerpColors(dark.base, light.base, m)
+    this.tint.lerpColors(dark.tint, light.tint, m)
+    const envIntensity = lerp(dark.envIntensity, light.envIntensity, m)
+    this.blob.material.envMapIntensity = envIntensity
+    this.satelliteMaterial.envMapIntensity = envIntensity * 0.88
+    this.renderer.toneMappingExposure = lerp(dark.exposure, light.exposure, m)
+
+    u.uRim.value = lerp(dark.rimMin, light.rimMin, m) + c.tint * lerp(dark.rimScale, light.rimScale, m)
+    u.uRimColor.value.copy(this.rimA).lerp(this.rimB, 0.5 + 0.5 * Math.sin(this.elapsed * 0.25))
+
+    this.blob.material.color.copy(this.base).lerp(this.tint, c.tint * lerp(dark.tintAmount, light.tintAmount, m))
 
     // satellites orbit the blob
     this.satelliteGroup.position.copy(this.blob.position)

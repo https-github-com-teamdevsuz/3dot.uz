@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { services, servicesTitle } from '~/data/site'
+
+const t = useSite()
 
 const root = ref<HTMLElement | null>(null)
 useReveal(root)
@@ -9,12 +10,12 @@ useReveal(root)
   <section id="services" ref="root" class="services section" data-scene="services">
     <div class="container">
       <header class="services__head">
-        <span class="eyebrow" data-reveal>xizmatlar</span>
-        <h2 class="h2" data-split>{{ servicesTitle }}</h2>
+        <span class="eyebrow" data-reveal>{{ t.ui.services.eyebrow }}</span>
+        <h2 class="h2" data-split>{{ t.servicesTitle }}</h2>
       </header>
 
       <ul class="services__grid">
-        <li v-for="(s, i) in services" :key="s.title" class="services__item" :data-reveal="(i % 4) * 0.06">
+        <li v-for="(s, i) in t.services" :key="s.title" class="services__item" :data-reveal="(i % 4) * 0.06">
           <span class="mono dim">{{ String(i + 1).padStart(2, '0') }}</span>
           <h3 class="services__title">{{ s.title }}</h3>
           <p class="dim">{{ s.sub }}</p>
@@ -46,7 +47,7 @@ useReveal(root)
   padding: 28px;
   border-right: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
-  background: rgba(5, 5, 5, 0.55);
+  background: rgb(var(--bg-rgb) / 0.55);
   backdrop-filter: blur(14px);
   overflow: hidden;
   transition: background-color 0.5s var(--ease-out);
@@ -62,7 +63,7 @@ useReveal(root)
   transition: transform 0.7s var(--ease-out);
 }
 .services__item:hover {
-  background: rgba(20, 20, 22, 0.75);
+  background: color-mix(in srgb, var(--bg-2) 80%, transparent);
 }
 .services__item:hover::after {
   transform: scaleX(1);

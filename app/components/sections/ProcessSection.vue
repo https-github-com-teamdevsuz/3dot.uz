@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import gsap from 'gsap'
-import { process } from '~/data/site'
+
+const t = useSite()
 
 const root = ref<HTMLElement | null>(null)
 const line = ref<HTMLElement | null>(null)
@@ -29,17 +30,17 @@ onBeforeUnmount(() => {
   <section ref="root" class="process section" data-scene="process">
     <div class="process__grid container">
       <header class="process__head">
-        <span class="eyebrow" data-reveal>jarayon</span>
-        <h2 class="h2" data-split>Ish bosqichlari</h2>
+        <span class="eyebrow" data-reveal>{{ t.ui.process.eyebrow }}</span>
+        <h2 class="h2" data-split>{{ t.ui.process.title }}</h2>
         <p class="dim" data-reveal>
-          Har bir bosqich aniq natija bilan yakunlanadi — siz har doim loyiha qayerda ekanini bilasiz.
+          {{ t.ui.process.text }}
         </p>
       </header>
 
       <div class="process__list">
         <span ref="line" class="process__line" aria-hidden="true" />
         <ol>
-        <li v-for="(step, i) in process" :key="step.title" class="process__step" data-reveal>
+        <li v-for="(step, i) in t.process" :key="step.title" class="process__step" data-reveal>
           <span class="process__num display">0{{ i + 1 }}</span>
           <div>
             <h3 class="process__title">{{ step.title }}</h3>
@@ -84,9 +85,9 @@ onBeforeUnmount(() => {
   background: var(--line);
 }
 .process__line {
-  background: var(--accent);
+  background: var(--accent-ink);
   transform-origin: top;
-  box-shadow: 0 0 12px var(--accent);
+  box-shadow: var(--glow);
 }
 .process__step {
   display: grid;

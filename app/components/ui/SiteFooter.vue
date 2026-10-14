@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { site } from '~/data/site'
+import { email, phone, socials, brand } from '~/data/site'
 
+const t = useSite()
+const localePath = useLocalePath()
 const year = new Date().getFullYear()
 </script>
 
@@ -8,24 +10,24 @@ const year = new Date().getFullYear()
   <footer class="footer">
     <div class="container">
       <div class="footer__top">
-        <nav class="footer__nav" aria-label="Footer">
-          <NuxtLink v-for="item in site.nav" :key="item.href" :to="item.href">{{ item.label }}</NuxtLink>
+        <nav class="footer__nav" :aria-label="t.ui.footer.navAria">
+          <NuxtLink v-for="item in t.site.nav" :key="item.hash" :to="localePath('/') + item.hash">{{ item.label }}</NuxtLink>
         </nav>
         <div class="footer__contacts">
-          <a :href="`tel:${site.phone.replace(/\s/g, '')}`">{{ site.phone }}</a>
-          <a :href="`mailto:${site.email}`">{{ site.email }}</a>
-          <span class="dim">{{ site.city }}</span>
+          <a :href="`tel:${phone.replace(/\s/g, '')}`">{{ phone }}</a>
+          <a :href="`mailto:${email}`">{{ email }}</a>
+          <span class="dim">{{ t.site.city }}</span>
         </div>
         <ul class="footer__socials">
-          <li v-for="s in site.socials" :key="s.label">
+          <li v-for="s in socials" :key="s.label">
             <a :href="s.href" target="_blank" rel="noopener">{{ s.label }} ↗</a>
           </li>
         </ul>
       </div>
       <div class="footer__brand" aria-hidden="true"><BrandLogo /></div>
       <div class="footer__bottom mono dim">
-        <span>© {{ year }} {{ site.brand }}</span>
-        <span>{{ site.tagline.join(' ') }}</span>
+        <span>© {{ year }} {{ brand }}</span>
+        <span>{{ t.site.tagline.join(' ') }}</span>
       </div>
     </div>
   </footer>
@@ -59,7 +61,7 @@ const year = new Date().getFullYear()
 .footer__nav a:hover,
 .footer__contacts a:hover,
 .footer__socials a:hover {
-  color: var(--accent);
+  color: var(--accent-ink);
 }
 .footer__brand {
   margin-top: 64px;

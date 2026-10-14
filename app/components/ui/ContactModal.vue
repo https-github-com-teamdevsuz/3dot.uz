@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { budgets, site } from '~/data/site'
+import { telegram } from '~/data/site'
 
 const { open, hide } = useContactModal()
 const nuxtApp = useNuxtApp()
+const t = useSite()
 const sent = ref(false)
 const sending = ref(false)
-const form = reactive({ name: '', contact: '', budget: budgets[1] ?? '', message: '', agree: false })
+const form = reactive({ name: '', contact: '', budget: t.value.budgets[1] ?? '', message: '', agree: false })
 const dialog = ref<HTMLElement | null>(null)
 
 const submit = async () => {
@@ -21,6 +22,7 @@ const onKey = (e: KeyboardEvent) => e.key === 'Escape' && hide()
 
 watch(open, (v) => {
   if (v) {
+    form.budget = t.value.budgets[1] ?? ''
     nuxtApp.$lenis?.stop()
     window.addEventListener('keydown', onKey)
     nextTick(() => dialog.value?.querySelector<HTMLElement>('input')?.focus())
@@ -37,46 +39,46 @@ watch(open, (v) => {
     <Transition name="modal">
       <div v-if="open" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" @click.self="hide">
         <div ref="dialog" class="modal__panel" data-lenis-prevent>
-          <button class="modal__close" type="button" aria-label="Yopish" @click="hide">×</button>
+          <button class="modal__close" type="button" :aria-label="t.ui.modal.close" @click="hide">×</button>
 
           <template v-if="!sent">
-            <h2 id="modal-title" class="h2">Salom! Keling, yangi eng yaxshi loyihangizni muhokama qilamiz</h2>
+            <h2 id="modal-title" class="h2">{{ t.ui.modal.title }}</h2>
             <form class="modal__form" @submit.prevent="submit">
               <label class="field">
-                <span class="mono dim">Ismingiz</span>
+                <span class="mono dim">{{ t.ui.modal.name }}</span>
                 <input v-model="form.name" required autocomplete="name" type="text" />
               </label>
               <label class="field">
-                <span class="mono dim">Telefon, e-mail yoki @telegram</span>
+                <span class="mono dim">{{ t.ui.modal.contact }}</span>
                 <input v-model="form.contact" required type="text" />
               </label>
               <fieldset class="field">
-                <legend class="mono dim">Byudjet</legend>
+                <legend class="mono dim">{{ t.ui.modal.budget }}</legend>
                 <div class="chips">
-                  <label v-for="b in budgets" :key="b" class="chip" :class="{ 'is-active': form.budget === b }">
+                  <label v-for="b in t.budgets" :key="b" class="chip" :class="{ 'is-active': form.budget === b }">
                     <input v-model="form.budget" type="radio" name="budget" :value="b" class="visually-hidden" />
                     {{ b }}
                   </label>
                 </div>
               </fieldset>
               <label class="field">
-                <span class="mono dim">Xabar</span>
+                <span class="mono dim">{{ t.ui.modal.message }}</span>
                 <textarea v-model="form.message" rows="3" />
               </label>
               <label class="agree">
                 <input v-model="form.agree" type="checkbox" required />
-                <span class="dim">Shaxsiy ma’lumotlarni qayta ishlashga roziman</span>
+                <span class="dim">{{ t.ui.modal.consent }}</span>
               </label>
               <button class="btn btn--solid" type="submit" :disabled="sending">
-                {{ sending ? 'Yuborilmoqda…' : 'Yuborish' }}
+                {{ sending ? t.ui.modal.sending : t.ui.modal.send }}
               </button>
             </form>
           </template>
 
           <div v-else class="modal__done">
-            <h2 id="modal-title" class="h2">Rahmat!</h2>
-            <p class="lead dim">So‘rovingizni o‘rganib, tez orada bog‘lanamiz.</p>
-            <a class="btn" :href="site.telegram" target="_blank" rel="noopener">Telegramda yozish</a>
+            <h2 id="modal-title" class="h2">{{ t.ui.modal.doneTitle }}</h2>
+            <p class="lead dim">{{ t.ui.modal.doneText }}</p>
+            <a class="btn" :href="telegram" target="_blank" rel="noopener">{{ t.ui.modal.telegram }}</a>
           </div>
         </div>
       </div>
@@ -91,7 +93,7 @@ watch(open, (v) => {
   z-index: 110;
   display: flex;
   justify-content: flex-end;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgb(var(--bg-rgb) / 0.6);
   backdrop-filter: blur(6px);
 }
 .modal__panel {
@@ -115,7 +117,7 @@ watch(open, (v) => {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  border: 1px solid var(--line);
+  border: 1px solid var(--line-strong);
   font-size: 1.6rem;
   line-height: 1;
 }
@@ -135,7 +137,7 @@ watch(open, (v) => {
   width: 100%;
   padding: 10px 0;
   border: 0;
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid var(--line-strong);
   background: transparent;
   color: var(--fg);
   font: inherit;
@@ -145,7 +147,7 @@ watch(open, (v) => {
 }
 .field input:focus,
 .field textarea:focus {
-  border-color: var(--accent);
+  border-color: var(--accent-ink);
 }
 .chips {
   display: flex;
@@ -156,17 +158,17 @@ watch(open, (v) => {
 .chip {
   padding: 10px 18px;
   border-radius: 999px;
-  border: 1px solid var(--line);
+  border: 1px solid var(--line-strong);
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
 }
 .chip.is-active {
   background: var(--accent);
-  border-color: var(--accent);
-  color: #000;
+  border-color: var(--accent-ink);
+  color: var(--on-accent);
 }
 .chip:focus-within {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--accent-ink);
   outline-offset: 2px;
 }
 .agree {
@@ -176,7 +178,7 @@ watch(open, (v) => {
   font-size: 0.9rem;
 }
 .agree input {
-  accent-color: var(--accent);
+  accent-color: var(--accent-ink);
   width: 18px;
   height: 18px;
 }

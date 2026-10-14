@@ -1,21 +1,26 @@
 <script setup lang="ts">
-import { projects, site } from '~/data/site'
+import { brand } from '~/data/site'
 
 // remount per project so split-text reveals run again
 definePageMeta({ key: (r) => r.fullPath })
 
 const route = useRoute()
-const index = computed(() => projects.findIndex((p) => p.slug === route.params.slug))
-const project = computed(() => projects[index.value])
-const next = computed(() => projects[(index.value + 1) % projects.length]!)
+const t = useSite()
+const localePath = useLocalePath()
+const projects = computed(() => t.value.projects)
+const index = computed(() => projects.value.findIndex((p) => p.slug === route.params.slug))
+const project = computed(() => projects.value[index.value])
+const next = computed(() => projects.value[(index.value + 1) % projects.value.length]!)
 
 if (!project.value) {
-  throw createError({ statusCode: 404, statusMessage: 'Loyiha topilmadi', fatal: true })
+  throw createError({ statusCode: 404, statusMessage: t.value.ui.error.projectNotFound, fatal: true })
 }
 
 useSeoMeta({
-  title: () => `${project.value?.title} — ${site.brand}`,
-  description: () => project.value?.summary
+  title: () => `${project.value?.title} — ${brand}`,
+  description: () => project.value?.summary,
+  ogTitle: () => `${project.value?.title} — ${brand}`,
+  ogDescription: () => project.value?.summary
 })
 
 const root = ref<HTMLElement | null>(null)
@@ -25,7 +30,7 @@ useReveal(root)
 <template>
   <article v-if="project" ref="root" class="case">
     <header class="case__hero container" data-scene="detail">
-      <NuxtLink to="/#projects" class="mono dim case__back">← barcha loyihalar</NuxtLink>
+      <NuxtLink :to="localePath('/') + '#projects'" class="mono dim case__back">{{ t.ui.project.back }}</NuxtLink>
       <span class="eyebrow" data-reveal>{{ project.year }} · {{ project.tags.join(' / ') }}</span>
       <h1 class="case__title display" data-split>{{ project.title }}</h1>
       <p class="lead dim case__summary" data-reveal>{{ project.summary }}</p>
@@ -40,23 +45,23 @@ useReveal(root)
     <section class="case__body container section" data-scene="intro">
       <dl class="case__facts">
         <div>
-          <dt class="mono dim">Yil</dt>
+          <dt class="mono dim">{{ t.ui.project.year }}</dt>
           <dd>{{ project.year }}</dd>
         </div>
         <div>
-          <dt class="mono dim">Stek</dt>
+          <dt class="mono dim">{{ t.ui.project.stack }}</dt>
           <dd>{{ project.stack.join(', ') }}</dd>
         </div>
         <div>
-          <dt class="mono dim">Natijalar</dt>
+          <dt class="mono dim">{{ t.ui.project.results }}</dt>
           <dd>{{ project.awards.join(' · ') }}</dd>
         </div>
       </dl>
       <p class="lead" data-scrub-words>{{ project.description }}</p>
     </section>
 
-    <NuxtLink :to="`/projects/${next.slug}`" class="case__next" data-scene="contact" data-cursor="Keyingi">
-      <span class="mono dim">keyingi loyiha</span>
+    <NuxtLink :to="localePath(`/projects/${next.slug}`)" class="case__next" data-scene="contact" :data-cursor="t.ui.project.nextCursor">
+      <span class="mono dim">{{ t.ui.project.next }}</span>
       <span class="case__next-title display">{{ next.title }}</span>
     </NuxtLink>
   </article>
@@ -76,7 +81,7 @@ useReveal(root)
   transition: color 0.3s;
 }
 .case__back:hover {
-  color: var(--accent);
+  color: var(--accent-ink);
 }
 .case__title {
   font-size: var(--fs-h1);
@@ -117,7 +122,7 @@ useReveal(root)
   transition: color 0.4s;
 }
 .case__next:hover .case__next-title {
-  color: var(--accent);
+  color: var(--accent-ink);
 }
 @media (max-width: 900px) {
   .case__body {

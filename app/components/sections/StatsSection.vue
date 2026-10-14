@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { stats } from '~/data/site'
-
-const maxCount = Math.max(...stats.awards.map((a) => a.count))
+const t = useSite()
+const maxCount = computed(() => Math.max(...t.value.stats.awards.map((a) => a.count)))
 
 const root = ref<HTMLElement | null>(null)
 useReveal(root)
@@ -11,17 +10,17 @@ useReveal(root)
   <section ref="root" class="stats section" data-scene="stats">
     <div class="stats__grid container">
       <div class="stats__left">
-        <span class="eyebrow" data-reveal>tajriba</span>
-        <h2 class="h2" data-split>{{ stats.headline }}</h2>
+        <span class="eyebrow" data-reveal>{{ t.ui.stats.eyebrow }}</span>
+        <h2 class="h2" data-split>{{ t.stats.headline }}</h2>
       </div>
 
       <div class="stats__big">
-        <div class="stats__number display"><CountUp :to="stats.total" suffix="+" /></div>
-        <p class="dim" data-reveal>{{ stats.caption }}</p>
+        <div class="stats__number display"><CountUp :to="t.stats.total" suffix="+" /></div>
+        <p class="dim" data-reveal>{{ t.stats.caption }}</p>
       </div>
 
       <ul class="stats__list">
-        <li v-for="a in stats.awards" :key="a.name" class="stats__row" data-reveal>
+        <li v-for="a in t.stats.awards" :key="a.name" class="stats__row" data-reveal>
           <span class="stats__name">{{ a.name }}</span>
           <span class="stats__bar" :style="{ '--w': `${(a.count / maxCount) * 100}%` }" />
           <span class="stats__count display">{{ a.count }}</span>
@@ -52,7 +51,7 @@ useReveal(root)
 .stats__number {
   font-size: clamp(7rem, 22vw, 22rem);
   line-height: 0.8;
-  background: linear-gradient(120deg, var(--fg), var(--accent) 60%, var(--violet));
+  background: linear-gradient(120deg, var(--fg), var(--accent-ink) 60%, var(--violet));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -79,7 +78,7 @@ useReveal(root)
   position: absolute;
   inset: 0 auto 0 0;
   width: var(--w);
-  background: var(--accent);
+  background: var(--accent-ink);
 }
 .stats__count {
   font-size: 1.8rem;

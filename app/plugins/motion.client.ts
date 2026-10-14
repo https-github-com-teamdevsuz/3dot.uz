@@ -45,7 +45,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     if (!hash) return
     if (document.querySelector(hash)) scrollTo(hash)
     // with out-in page transitions the target may only exist once the enter animation is done
-    else nuxtApp.hooks.hookOnce('page:transition:finish', () => document.querySelector(hash) && scrollTo(hash))
+    else nuxtApp.hooks.hookOnce('page:transition:finish', () => { if (document.querySelector(hash)) scrollTo(hash) })
   })
 
   return {

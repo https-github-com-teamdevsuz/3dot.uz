@@ -94,7 +94,7 @@ onBeforeUnmount(() => {
   mix-blend-mode: normal;
 }
 .cursor__label {
-  color: #000;
+  color: var(--on-accent);
   opacity: 0;
   transition: opacity 0.3s;
 }

@@ -5,6 +5,7 @@ const canvas = ref<HTMLCanvasElement | null>(null)
 const failed = ref(false)
 const active = useActiveScene()
 const { $lenis, $reducedMotion } = useNuxtApp()
+const { theme } = useTheme()
 
 let scene: LiquidScene | null = null
 let disposed = false
@@ -23,7 +24,9 @@ onMounted(async () => {
     // three.js is code-split: it never blocks first paint
     const { LiquidScene } = await import('~/webgl/LiquidScene')
     if (disposed) return // unmounted while three.js was loading
-    scene = new LiquidScene(el, { reducedMotion: !!$reducedMotion })
+    // DOM attribute is the source of truth until theme.client.ts syncs state on app:mounted
+    const initialTheme = document.documentElement.dataset.theme === 'light' ? 'light' : 'dark'
+    scene = new LiquidScene(el, { reducedMotion: !!$reducedMotion, theme: initialTheme })
     scene.setSection(active.value)
     scene.start()
   } catch (err) {
@@ -40,6 +43,7 @@ onMounted(async () => {
 })
 
 watch(active, (name) => scene?.setSection(name))
+watch(theme, (t) => scene?.setTheme(t))
 
 onBeforeUnmount(() => {
   disposed = true
@@ -89,5 +93,13 @@ onBeforeUnmount(() => {
   border-radius: 50%;
   background: radial-gradient(circle at 35% 30%, #fff, #8d93a3 35%, #1a1c22 70%, #c8ff5a 100%);
   filter: blur(1px);
+}
+:root[data-theme='light'] .webgl::before {
+  background:
+    radial-gradient(40vmax 30vmax at 70% 40%, rgba(123, 92, 255, 0.1), transparent 70%),
+    radial-gradient(30vmax 24vmax at 30% 70%, rgba(77, 107, 0, 0.08), transparent 70%);
+}
+:root[data-theme='light'] .webgl--fallback::after {
+  background: radial-gradient(circle at 35% 30%, #fff, #9ea3ad 30%, #2a2d35 68%, #4d6b00 100%);
 }
 </style>

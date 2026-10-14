@@ -1,3 +1,10 @@
+import { DEFAULT_LOCALE, LOCALES, PROJECT_SLUGS } from './app/data/site'
+
+const prefixes = LOCALES.map((l) => (l === DEFAULT_LOCALE ? '' : `/${l}`))
+
+// Runs before first paint: sets data-theme, and redirects to the stored ru/en locale (US-3).
+const themeLocaleScript = `(function(){var d=document.documentElement,t,l,p=location.pathname;try{t=localStorage.getItem('3dot:theme');l=localStorage.getItem('3dot:locale')}catch(e){}d.dataset.theme=t==='light'||t==='dark'?t:(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');if((l==='ru'||l==='en')&&!/^\\/(ru|en)(\\/|$)/.test(p))location.replace('/'+l+(p==='/'?'':p)+location.search+location.hash)})()`
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2026-10-01',
@@ -10,15 +17,13 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      htmlAttrs: { lang: 'uz' },
-      title: '3dot — raqamlashtirish va IT-yechimlar',
       meta: [
         { name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=5' },
-        { name: 'description', content: '3dot — biznes va davlat tashkilotlari uchun raqamlashtirish: CRM, ERP, avtomatlashtirish, web-ilovalar va saytlar.' },
-        { name: 'theme-color', content: '#050505' },
-        { property: 'og:title', content: '3dot — raqamlashtirish va IT-yechimlar' },
+        { name: 'theme-color', media: '(prefers-color-scheme: dark)', content: '#050505' },
+        { name: 'theme-color', media: '(prefers-color-scheme: light)', content: '#f4f3ee' },
         { property: 'og:type', content: 'website' }
       ],
+      script: [{ innerHTML: themeLocaleScript, tagPosition: 'head', tagPriority: 'critical' }],
       link: [
         { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
         { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
@@ -48,8 +53,23 @@ export default defineNuxtConfig({
     }
   },
 
+  // every page is duplicated under /ru and /en (locale comes from the path prefix)
+  hooks: {
+    'pages:extend'(pages) {
+      for (const p of [...pages]) {
+        for (const l of LOCALES) {
+          if (l === DEFAULT_LOCALE) continue
+          pages.push({ ...p, name: p.name ? `${p.name}___${l}` : undefined, path: `/${l}${p.path === '/' ? '' : p.path}` })
+        }
+      }
+    }
+  },
+
   nitro: {
-    prerender: { routes: ['/'], crawlLinks: true }
+    prerender: {
+      crawlLinks: true,
+      routes: prefixes.flatMap((x) => [x || '/', ...PROJECT_SLUGS.map((s) => `${x}/projects/${s}`)])
+    }
   },
 
   typescript: { strict: true }

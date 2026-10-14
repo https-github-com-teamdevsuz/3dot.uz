@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import gsap from 'gsap'
-import { site, stats } from '~/data/site'
+
+import { brand } from '~/data/site'
+const t = useSite()
 
 const root = ref<HTMLElement | null>(null)
 const marquee = ref<HTMLElement | null>(null)
@@ -25,15 +27,15 @@ onBeforeUnmount(() => {
   <section id="intro" ref="root" class="intro section" data-scene="intro">
     <div class="intro__marquee" aria-hidden="true">
       <div ref="marquee" class="intro__track display">
-        <span v-for="n in 4" :key="n">{{ site.brand }} <em>{{ site.role }}</em> —&nbsp;</span>
+        <span v-for="n in 4" :key="n">{{ brand }} <em>{{ t.site.role }}</em> —&nbsp;</span>
       </div>
     </div>
 
     <div class="intro__grid container">
-      <span class="eyebrow" data-reveal>studiya haqida</span>
-      <p class="intro__text lead" data-scrub-words>{{ site.intro }}</p>
+      <span class="eyebrow" data-reveal>{{ t.ui.intro.eyebrow }}</span>
+      <p class="intro__text lead" data-scrub-words>{{ t.site.intro }}</p>
       <dl class="intro__numbers">
-        <div v-for="n in stats.numbers" :key="n.label" data-reveal>
+        <div v-for="n in t.stats.numbers" :key="n.label" data-reveal>
           <dt class="display"><CountUp :to="n.value" :suffix="n.suffix" /></dt>
           <dd class="dim">{{ n.label }}</dd>
         </div>

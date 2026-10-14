@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { site } from '~/data/site'
+const t = useSite()
 
 useSeoMeta({
-  title: `${site.brand} — ${site.tagline.join(' ')}`,
-  description: site.intro
+  title: () => t.value.meta.title,
+  description: () => t.value.meta.description,
+  ogTitle: () => t.value.meta.title,
+  ogDescription: () => t.value.meta.description
 })
 </script>
 

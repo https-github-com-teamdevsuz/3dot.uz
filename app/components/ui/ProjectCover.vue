@@ -3,6 +3,7 @@
  * Procedural cover art so the template works without image assets.
  * Swap for <NuxtImg>/<video> once real case-study media exists.
  */
+const t = useSite()
 const props = defineProps<{ palette: [string, string]; seed: number; title: string }>()
 
 const style = computed(() => {
@@ -21,7 +22,7 @@ const style = computed(() => {
 </script>
 
 <template>
-  <div class="cover" :style="style" role="img" :aria-label="`${title} loyihasi muqovasi`">
+  <div class="cover" :style="style" role="img" :aria-label="t.ui.coverLabel(title)">
     <div class="cover__bg" />
     <div class="cover__orb" />
     <div class="cover__rings" />
@@ -37,6 +38,7 @@ const style = computed(() => {
   height: 100%;
   background: var(--b);
   isolation: isolate;
+  box-shadow: inset 0 0 0 1px var(--line);
 }
 .cover__bg {
   position: absolute;

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import gsap from 'gsap'
-import { site, stats } from '~/data/site'
+
+const t = useSite()
 
 const root = ref<HTMLElement | null>(null)
 const preloaded = usePreloaded()
@@ -42,12 +43,12 @@ onBeforeUnmount(() => ctx?.revert())
 <template>
   <section ref="root" class="hero" data-scene="hero" aria-labelledby="hero-title">
     <div class="hero__top container">
-      <span class="eyebrow" data-hero-fade>{{ site.role }} — {{ site.city }}</span>
-      <span class="mono dim hero__index" data-hero-fade>(IT-yechimlar ’26)</span>
+      <span class="eyebrow" data-hero-fade>{{ t.site.role }} — {{ t.site.city }}</span>
+      <span class="mono dim hero__index" data-hero-fade>{{ t.ui.hero.index }}</span>
     </div>
 
     <h1 id="hero-title" class="hero__title display container">
-      <span v-for="(word, i) in site.tagline" :key="word" class="hero__line" :class="`hero__line--${i}`">
+      <span v-for="(word, i) in t.site.tagline" :key="word" class="hero__line" :class="`hero__line--${i}`">
         <span class="hero__line-inner">{{ word }}</span>
       </span>
     </h1>
@@ -55,17 +56,17 @@ onBeforeUnmount(() => ctx?.revert())
     <div class="hero__bottom container">
       <div class="hero__scroll mono" data-hero-fade>
         <span class="hero__scroll-dot" />
-        scroll
+        {{ t.ui.hero.scroll }}
       </div>
       <ul class="hero__awards" data-hero-fade>
-        <li v-for="a in stats.awards.slice(0, 3)" :key="a.name">
+        <li v-for="a in t.stats.awards.slice(0, 3)" :key="a.name">
           <span class="mono dim">{{ a.name }}</span>
           <strong>{{ a.count }}+</strong>
         </li>
       </ul>
       <div class="hero__cta" data-hero-fade>
-        <p class="dim">{{ site.heroLead }}</p>
-        <button class="btn btn--solid" type="button" @click="show">Loyihani muhokama qilish <span aria-hidden="true">→</span></button>
+        <p class="dim">{{ t.site.heroLead }}</p>
+        <button class="btn btn--solid" type="button" @click="show">{{ t.ui.hero.cta }} <span aria-hidden="true">→</span></button>
       </div>
     </div>
   </section>
@@ -121,7 +122,7 @@ onBeforeUnmount(() => ctx?.revert())
 .hero__scroll-dot {
   width: 22px;
   height: 36px;
-  border: 1px solid var(--line);
+  border: 1px solid var(--line-strong);
   border-radius: 999px;
   position: relative;
 }
@@ -134,7 +135,7 @@ onBeforeUnmount(() => ctx?.revert())
   height: 7px;
   translate: -50% 0;
   border-radius: 2px;
-  background: var(--accent);
+  background: var(--accent-ink);
   animation: scroll-dot 1.8s var(--ease-in-out) infinite;
 }
 @keyframes scroll-dot {

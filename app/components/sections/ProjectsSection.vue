@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import gsap from 'gsap'
-import { projects, stats } from '~/data/site'
+
+const t = useSite()
+const localePath = useLocalePath()
+const projects = computed(() => t.value.projects)
 
 const root = ref<HTMLElement | null>(null)
 const track = ref<HTMLElement | null>(null)
@@ -54,9 +57,9 @@ onBeforeUnmount(() => {
 <template>
   <section id="projects" ref="root" class="projects" data-scene="projects">
     <div class="projects__head container">
-      <span class="eyebrow" data-reveal>tanlangan ishlar</span>
-      <h2 class="h2" data-split>Loyihalar</h2>
-      <span class="mono dim" data-reveal>{{ String(projects.length).padStart(2, '0') }} ta keys</span>
+      <span class="eyebrow" data-reveal>{{ t.ui.projects.eyebrow }}</span>
+      <h2 class="h2" data-split>{{ t.ui.projects.title }}</h2>
+      <span class="mono dim" data-reveal>{{ t.ui.projects.count(projects.length) }}</span>
     </div>
 
     <div class="projects__viewport">
@@ -64,9 +67,9 @@ onBeforeUnmount(() => {
         <NuxtLink
           v-for="(p, i) in projects"
           :key="p.slug"
-          :to="`/projects/${p.slug}`"
+          :to="localePath(`/projects/${p.slug}`)"
           class="project-card"
-          data-cursor="Ko‘rish"
+          :data-cursor="t.ui.projects.cursor"
         >
           <div class="project-card__media">
             <ProjectCover :palette="p.palette" :seed="i + 1" :title="p.title" />
@@ -82,8 +85,8 @@ onBeforeUnmount(() => {
         </NuxtLink>
 
         <div class="projects__all">
-          <span class="display">{{ stats.numbers[0]?.value }}{{ stats.numbers[0]?.suffix }}</span>
-          <p class="dim">{{ stats.numbers[0]?.label.toLowerCase() }}</p>
+          <span class="display">{{ t.stats.numbers[0]?.value }}{{ t.stats.numbers[0]?.suffix }}</span>
+          <p class="dim">{{ t.stats.numbers[0]?.label.toLowerCase() }}</p>
         </div>
       </div>
     </div>
@@ -149,7 +152,7 @@ onBeforeUnmount(() => {
   transition: color 0.4s;
 }
 .project-card:hover .project-card__title {
-  color: var(--accent);
+  color: var(--accent-ink);
 }
 .project-card__awards {
   display: flex;
@@ -183,7 +186,7 @@ onBeforeUnmount(() => {
 .projects__progress-bar span {
   display: block;
   height: 100%;
-  background: var(--accent);
+  background: var(--accent-ink);
   transform: scaleX(0);
   transform-origin: left;
 }

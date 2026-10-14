@@ -46,3 +46,32 @@ export const SCENE_PRESETS: Record<string, Partial<SceneState>> = {
 export function resolvePreset(name: string | undefined | null): SceneState {
   return { ...DEFAULT_STATE, ...(name ? SCENE_PRESETS[name] : undefined) }
 }
+
+// ---------------------------------------------------------------- theme palettes
+
+export type SceneTheme = 'dark' | 'light'
+
+export interface ScenePalette {
+  /** rim (fresnel) colour oscillates between rimA and rimB */
+  rimA: string
+  rimB: string
+  /** blob base colour (chrome = near white) */
+  base: string
+  /** colour the blob is tinted toward by `SceneState.tint` */
+  tint: string
+  /** uRim = rimMin + tint * rimScale */
+  rimMin: number
+  rimScale: number
+  /** how far `tint` pulls the base toward the tint colour */
+  tintAmount: number
+  /** blob envMapIntensity (satellites use 0.88×) */
+  envIntensity: number
+  exposure: number
+}
+
+export const SCENE_PALETTES: Record<SceneTheme, ScenePalette> = {
+  // identical to the pre-theme constants
+  dark: { rimA: '#c8ff5a', rimB: '#7b5cff', base: '#ffffff', tint: '#c8ff5a', rimMin: 0.25, rimScale: 0.9, tintAmount: 0.35, envIntensity: 1.25, exposure: 1.05 },
+  // darker inks so the rim reads on #f4f3ee; the dark studio env keeps the body high-contrast
+  light: { rimA: '#5f8a00', rimB: '#5a3be0', base: '#f2f2f2', tint: '#7fb800', rimMin: 0.15, rimScale: 0.63, tintAmount: 0.45, envIntensity: 1.0, exposure: 0.95 }
+}

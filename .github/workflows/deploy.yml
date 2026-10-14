@@ -1,0 +1,54 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  # Same gates as CI (agents:check, typecheck, generate, e2e). Deploy runs only if they pass.
+  gate:
+    uses: ./.github/workflows/ci.yml
+
+  deploy:
+    needs: gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    # Protect this environment with "Required reviewers" in repo settings to enforce the human-approval gate.
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Generate static site
+        run: npm run generate
+
+      # Pages runs Jekyll by default, which drops directories starting with "_" (Nuxt's _nuxt/).
+      - name: Disable Jekyll
+        run: touch .output/public/.nojekyll
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .output/public
+
+      - id: deployment
+        uses: actions/deploy-pages@v4

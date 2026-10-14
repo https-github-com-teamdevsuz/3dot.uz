@@ -1,10 +1,11 @@
 <script setup lang="ts">
 useSceneSections()
+const t = useSite()
 </script>
 
 <template>
   <div class="app">
-    <a class="skip-link" href="#main">Asosiy kontentga o‘tish</a>
+    <a class="skip-link" href="#main">{{ t.ui.skipLink }}</a>
     <SitePreloader />
     <LiquidCanvas />
     <SiteHeader />
@@ -31,7 +32,7 @@ useSceneSections()
   padding: 10px 16px;
   border-radius: 999px;
   background: var(--accent);
-  color: #000;
+  color: var(--on-accent);
   transform: translateY(-200%);
 }
 .skip-link:focus {

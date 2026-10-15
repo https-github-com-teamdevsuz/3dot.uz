@@ -1,4 +1,7 @@
 # Copy to .dev.vars (git-ignored) for `npx wrangler dev`. Never commit real values.
+# BotFather token of the lead bot (secret, format 123456:ABC...). Empty here.
 TELEGRAM_BOT_TOKEN=
+# Telegram group chat id: negative; supergroups start with -100 (e.g. -1001234567890). Empty here.
 TELEGRAM_CHAT_ID=
+# Origins allowed to POST leads (comma list). Local Nuxt dev server.
 ALLOWED_ORIGIN=http://localhost:3000

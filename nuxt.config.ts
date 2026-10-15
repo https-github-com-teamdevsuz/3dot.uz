@@ -18,7 +18,10 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
 
   runtimeConfig: {
-    public: { leadEndpoint: 'https://lead-relay.example.workers.dev/lead', showPlaceholders: '' }
+    // server-only, from .env: NUXT_TELEGRAM_BOT_TOKEN / NUXT_TELEGRAM_CHAT_ID (never reach the client)
+    telegramBotToken: '',
+    telegramChatId: '',
+    public: { leadEndpoint: '/api/lead', showPlaceholders: '' }
   },
 
   css: ['~/assets/css/fonts.css', '~/assets/css/main.css'],

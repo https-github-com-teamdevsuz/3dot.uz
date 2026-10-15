@@ -14,3 +14,4 @@ Format: sana — qaror — sabab.
 - **2026-10-14** — Telegram kanal: t.me/threedot_uz.
 - **2026-10-14** — **Muloqot uslubi: jiddiy, korporativ, minimal emoji.** — Yirik tashkilotlar uslubi; mijozlar B2B va davlat sektori.
 - **2026-10-14** — HQ papkasi yaratildi: barcha holat va qarorlar shu yerda yuritiladi.
+- **2026-10-15** — Telegram lead xabari: `parse_mode: HTML`. Foydalanuvchi matni (`&`, `<`, `>`) escape qilinadi. Yorliqlar har doim o‘zbekcha. Vaqt UTC+5 qat‘iy. Bot tokeni va guruh ID faqat Cloudflare secret va `.dev.vars` da, repoda emas. — Xabar aniq va chiroyli bo‘lishi kerak. Escape bilan noto‘g‘ri markup lidni yo‘qotmaydi. Sirlar repo va statik chiqishdan tashqarida turadi.

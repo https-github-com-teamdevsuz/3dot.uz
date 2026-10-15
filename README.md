@@ -65,6 +65,8 @@ cd workers/lead-relay && npx wrangler dev
 
 Lokal relay bilan ishlash uchun `.env` da `NUXT_PUBLIC_LEAD_ENDPOINT=http://localhost:8787/lead` qo‘ying.
 
+Telegram xabari formati (HTML, o‘zbek yorliqlar, Toshkent vaqti) va guruhga ulash checklist’i: `workers/lead-relay/README.md` (“Message format”, “Telegram guruhga ulash”).
+
 Egasi uchun qadamlar (BotFather, `wrangler secret put`, `wrangler deploy`, `LEAD_ENDPOINT`): `workers/lead-relay/README.md` va `docs/sdlc/2026-10-cro-analysis/08-release.md`.
 
 ## Tillar

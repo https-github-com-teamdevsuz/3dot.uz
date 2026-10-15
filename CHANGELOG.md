@@ -3,6 +3,18 @@
 All notable changes to this project are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Unreleased]
+
+### Changed
+- feat(lead-relay): Telegram messages use HTML. Labels are bold, user input is escaped.
+- feat(lead-relay): fixed line order, empty budget/message/page lines omitted, `Til` line per locale.
+- feat(lead-relay): phone normalised to `+998…`, `Telegramda yozish` button for `@username` contacts.
+- feat(lead-relay): timestamp in Tashkent time (UTC+5).
+
+### Added
+- `server/api/lead.post.ts`: same-origin lead endpoint reusing the worker logic; secrets from `.env` (`NUXT_TELEGRAM_BOT_TOKEN`, `NUXT_TELEGRAM_CHAT_ID`), `npm start` runs the built server with `--env-file=.env`.
+- docs: worker README checklist (BotFather, group id, `-100` upgrade trap), root `.env.example` note.
+
 ## [0.4.0] - 2026-10-14
 
 CRO rework, based on the business-analyst strategy in `docs/sdlc/2026-10-cro-analysis/00-strategy.md`.

@@ -1,6 +1,6 @@
 # 02 · Holat
 
-Oxirgi yangilanish: 2026-10-14
+Oxirgi yangilanish: 2026-10-15
 
 ## Umumiy
 | Yo'nalish | Holat | Izoh |
@@ -27,6 +27,9 @@ Oxirgi yangilanish: 2026-10-14
 - 2026-10-14 — HQ (shu papka) yaratildi.
 - 2026-10-14 — Sherik ishi pull qilindi (v0.2.0–0.3.0): uz/ru/en tillari, och/qorong'i tema, SEO + sitemap, o'z serverdagi shriftlar, GitHub Pages deploy, 3 yangi agent (linguist, seo-specialist, performance-engineer).
 - 2026-10-14 — Sherik ishi pull qilindi (v0.4.0, CRO): yangi hero "Excel o'rniga — yagona tizim", yagona taklif "Bepul audit olish", 4 xizmat, 7 bo'lim, narx "$1 500 dan" (namuna), lead forma → Cloudflare Worker → Telegram (hali deploy qilinmagan, go-live blokeri).
+- 2026-10-15 — Telegram lead xabari qayta formatlandi (HTML, o‘zbek yorliqlar, Toshkent vaqti, @username tugmasi). Guruhga ulash yo‘riqnomasi README‘da. Deploy hali qilinmagan.
+
+- 2026-10-15 — Lead forma → `/api/lead` (sayt serveri) → Telegram guruh: haqiqiy xabar guruhga keldi, tasdiqlandi. Secret’lar `.env` da.
 
 ## Keyingi qadamlar (navbat bilan)
 1. Domen / havola muammosini hal qilish

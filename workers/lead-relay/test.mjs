@@ -1,14 +1,17 @@
 // Self-check for the lead relay. Run: node workers/lead-relay/test.mjs
 import assert from 'node:assert/strict';
-import worker from './worker.js';
+import worker, { formatLead } from './worker.js';
 
 const ORIGIN = 'https://3dot.uz';
 const env = {
   TELEGRAM_BOT_TOKEN: 'test-token',
-  TELEGRAM_CHAT_ID: '42',
+  TELEGRAM_CHAT_ID: '-1001234567890',
   ALLOWED_ORIGIN: `${ORIGIN}, http://localhost:3000`,
 };
 const good = { name: 'Ali', contact: '+998901234567', locale: 'uz', page: '/' };
+const NOW = Date.UTC(2026, 9, 15, 9, 32); // 09:32 UTC = 14:32 in Tashkent
+const base = { name: 'Dilshod', contact: '+998901234567', budget: '', message: '', locale: 'uz', page: '' };
+const lead = (over) => formatLead({ ...base, ...over }, NOW);
 
 let calls = [];
 let tgOk = true;
@@ -77,16 +80,20 @@ test('filled honeypot -> 204, nothing forwarded', async () => {
   assert.equal(calls.length, 0);
 });
 
-test('valid lead -> 204, one Telegram sendMessage with plain text', async () => {
+test('valid lead -> 204, one Telegram sendMessage, HTML, escaped input', async () => {
   const res = await post({ ...good, budget: '$1 500', message: 'Hi <b>' }, { ip: '2.2.2.2' });
   assert.equal(res.status, 204);
   assert.equal(calls.length, 1);
   assert.equal(calls[0].url, 'https://api.telegram.org/bottest-token/sendMessage');
   const body = JSON.parse(calls[0].init.body);
-  assert.equal(body.chat_id, '42');
-  assert.match(body.text, /Name: Ali/);
-  assert.match(body.text, /Budget: \$1 500/);
-  assert.equal(body.parse_mode, undefined);
+  assert.equal(body.chat_id, '-1001234567890');
+  assert.equal(body.parse_mode, 'HTML');
+  assert.equal(body.disable_web_page_preview, true);
+  assert.match(body.text, /<b>Ism:<\/b> Ali/);
+  assert.match(body.text, /<b>Byudjet:<\/b> \$1 500/);
+  assert.match(body.text, /<b>Xabar:<\/b> Hi &lt;b&gt;/);
+  assert.doesNotMatch(body.text, /2\.2\.2\.2/); // IP never in text (AC-8)
+  assert.deepEqual(Object.keys(body).sort(), ['chat_id', 'disable_web_page_preview', 'parse_mode', 'text']); // no reply_markup for a non-username contact
 });
 
 test('Telegram rejects -> 502', async () => {
@@ -155,6 +162,98 @@ test('Access-Control-Allow-Origin present on 400, 413 and 429 from the allowed o
   const limited = await post(good, { ip: '6.6.6.7' });
   assert.equal(limited.status, 429);
   assert.equal(limited.headers.get('access-control-allow-origin'), ORIGIN);
+});
+
+// formatLead: pure, fixed clock passed in (no Date mock).
+test('full uz lead -> exact text (AC-1, AC-6)', () => {
+  const r = formatLead(
+    {
+      name: 'Dilshod Karimov',
+      contact: 'dilshod@example.uz',
+      budget: '$10–30k',
+      message: "Do‘konlar tarmog‘i uchun CRM kerak, 1C bilan integratsiya.",
+      locale: 'uz',
+      page: '/',
+    },
+    NOW,
+  );
+  const expected = [
+    "<b>Yangi so‘rov: bepul audit</b>",
+    '<b>Ism:</b> Dilshod Karimov',
+    '<b>Aloqa:</b> dilshod@example.uz',
+    '<b>Byudjet:</b> $10–30k',
+    "<b>Til:</b> O‘zbek — shu tilda javob bering",
+    '',
+    "<b>Xabar:</b> Do‘konlar tarmog‘i uchun CRM kerak, 1C bilan integratsiya.",
+    '—',
+    '<b>Sahifa:</b> Bosh sahifa',
+    '<b>Vaqt:</b> 15.10.2026, 14:32 (Toshkent)',
+  ].join('\n');
+  assert.equal(r.text, expected);
+  assert.equal('reply_markup' in r, false);
+});
+
+test('minimal ru lead -> exact text, no budget/message/page lines (AC-2, AC-3)', () => {
+  const r = lead({ name: 'Анна', contact: 'anna@example.ru', locale: 'ru' });
+  assert.equal(
+    r.text,
+    [
+      "<b>Yangi so‘rov: bepul audit</b>",
+      '<b>Ism:</b> Анна',
+      '<b>Aloqa:</b> anna@example.ru',
+      '<b>Til:</b> Русский — shu tilda javob bering',
+      '—',
+      '<b>Vaqt:</b> 15.10.2026, 14:32 (Toshkent)',
+    ].join('\n'),
+  );
+  assert.doesNotMatch(r.text, /Byudjet:|Xabar:|Sahifa:/);
+});
+
+test('language line per locale (AC-3)', () => {
+  assert.match(lead({ locale: 'uz' }).text, /^<b>Til:<\/b> O‘zbek — shu tilda javob bering$/m);
+  assert.match(lead({ locale: 'ru' }).text, /^<b>Til:<\/b> Русский — shu tilda javob bering$/m);
+  assert.match(lead({ locale: 'en' }).text, /^<b>Til:<\/b> English — shu tilda javob bering$/m);
+});
+
+test('contact normalisation: Uzbek numbers -> +998XXXXXXXXX, others unchanged (AC-4)', () => {
+  const aloqa = (contact) => lead({ contact }).text.match(/^<b>Aloqa:<\/b> (.*)$/m)[1];
+  assert.equal(aloqa('998901234567'), '+998901234567');
+  assert.equal(aloqa('+998 90 123-45-67'), '+998901234567');
+  assert.equal(aloqa('+998(90)1234567'), '+998901234567');
+  assert.equal(aloqa('90 123 45 67'), '90 123 45 67');
+  assert.equal(aloqa('ali@mail.uz'), 'ali@mail.uz');
+  assert.equal(aloqa('Dilshod, Telegram'), 'Dilshod, Telegram');
+});
+
+test('@username contact -> one "Telegramda yozish" button (AC-5)', () => {
+  const r = lead({ contact: '@ali_dev' });
+  assert.deepEqual(r.reply_markup, {
+    inline_keyboard: [[{ text: 'Telegramda yozish', url: 'https://t.me/ali_dev' }]],
+  });
+});
+
+test('@test (too short), email and phone -> no reply_markup key (AC-5)', () => {
+  assert.equal('reply_markup' in lead({ contact: '@test' }), false);
+  assert.equal('reply_markup' in lead({ contact: 'ali@mail.uz' }), false);
+  assert.equal('reply_markup' in lead({ contact: '+998901234567' }), false);
+});
+
+test('user input is escaped, not interpreted; no emoji, no "!" (AC-7)', () => {
+  const r = lead({ name: 'A & B', message: '<b>x</b> & *y*' });
+  assert.match(r.text, /^<b>Ism:<\/b> A &amp; B$/m);
+  assert.match(r.text, /^<b>Xabar:<\/b> &lt;b&gt;x&lt;\/b&gt; &amp; \*y\*$/m);
+  assert.doesNotMatch(r.text, /\p{Extended_Pictographic}/u);
+  assert.doesNotMatch(r.text, /!/);
+});
+
+test('page "/" -> "Bosh sahifa"; other paths as-is (design spec)', () => {
+  assert.match(lead({ page: '/' }).text, /^<b>Sahifa:<\/b> Bosh sahifa$/m);
+  assert.match(lead({ page: '/en/projects/savdo-360' }).text, /^<b>Sahifa:<\/b> \/en\/projects\/savdo-360$/m);
+});
+
+test('timestamp is the last line, Tashkent time (AC-6)', () => {
+  const last = lead({}).text.split('\n').at(-1);
+  assert.equal(last, '<b>Vaqt:</b> 15.10.2026, 14:32 (Toshkent)');
 });
 
 let failed = 0;
